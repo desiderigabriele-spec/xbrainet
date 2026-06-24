@@ -3,14 +3,20 @@ import { supabase } from '../lib/supabase.js';
 import { detectTopic } from '../lib/topic-detector.js';
 import { buildSystemPrompt } from '../lib/system-prompts.js';
 import { updateDigitalBrain } from '../lib/brain-updater.js';
+import { extractAuthUserId } from '../lib/auth.js';
 
 const FREE_DAILY_LIMIT = 10;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { userId, message, entity, tier, lang = 'en' } = req.body;
-  if (!userId || !message) return res.status(400).json({ error: 'Missing params' });
+  const authUserId = extractAuthUserId(req);
+  if (!authUserId) return res.status(401).json({ error: 'Unauthorized' });
+
+  const { message, entity, tier, lang = 'en' } = req.body;
+  if (!message) return res.status(400).json({ error: 'Message required' });
+
+  const userId = authUserId;
 
   if (tier === 'free') {
     const { data: user } = await supabase

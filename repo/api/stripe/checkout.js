@@ -1,4 +1,6 @@
 import Stripe from 'stripe';
+import { extractAuthUserId } from '../../lib/auth.js';
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const PRICES = {
@@ -8,7 +10,11 @@ const PRICES = {
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
-  const { userId, tier, username } = req.body;
+
+  const authUserId = extractAuthUserId(req);
+  if (!authUserId) return res.status(401).json({ error: 'Unauthorized' });
+
+  const { tier, username } = req.body;
   if (!PRICES[tier]) return res.status(400).json({ error: 'Invalid tier' });
 
   const session = await stripe.checkout.sessions.create({
@@ -17,7 +23,7 @@ export default async function handler(req, res) {
     line_items: [{ price: PRICES[tier], quantity: 1 }],
     success_url: `${process.env.NEXT_PUBLIC_URL}?upgrade=success&tier=${tier}`,
     cancel_url:  `${process.env.NEXT_PUBLIC_URL}?upgrade=cancelled`,
-    metadata:    { userId, tier, username }
+    metadata:    { userId: authUserId, tier, username }
   });
 
   res.status(200).json({ url: session.url });

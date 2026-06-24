@@ -1,7 +1,7 @@
 import twilio from 'twilio';
-import bcrypt from 'bcryptjs';
 import { supabase } from '../../lib/supabase.js';
-import { generateUsername } from '../../lib/username.js';
+import { generateUsername, hashPhoneForLookup } from '../../lib/username.js';
+import { signToken } from '../../lib/auth.js';
 
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
@@ -23,20 +23,14 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Verification failed' });
   }
 
-  // Find existing user — O(n) bcrypt compare, acceptable for MVP
-  const { data: allUsers } = await supabase.from('users').select('*');
-  let user = null;
-  for (const u of allUsers || []) {
-    if (await bcrypt.compare(normalized, u.phone_hash)) {
-      user = u;
-      break;
-    }
-  }
+  const phoneHash = hashPhoneForLookup(phone);
+
+  let { data: user, error } = await supabase.from('users')
+    .select('*').eq('phone_hash', phoneHash).single();
 
   if (!user) {
-    const phoneHash = await bcrypt.hash(normalized, 10);
-    const username  = generateUsername();
-    const { data: newUser, error } = await supabase
+    const username = generateUsername();
+    const { data: newUser, error: createError } = await supabase
       .from('users')
       .insert({
         phone_hash: phoneHash,
@@ -48,7 +42,7 @@ export default async function handler(req, res) {
       })
       .select()
       .single();
-    if (error) return res.status(500).json({ error: 'Failed to create user' });
+    if (createError) return res.status(500).json({ error: 'Failed to create user' });
     user = newUser;
   } else {
     await supabase.from('users')
@@ -62,8 +56,11 @@ export default async function handler(req, res) {
     .eq('user_id', user.id)
     .single();
 
+  const token = signToken(user.id);
+
   res.status(200).json({
     success: true,
+    token,
     userId:    user.id,
     username:  user.username,
     tier:      user.tier,
