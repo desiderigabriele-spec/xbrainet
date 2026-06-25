@@ -847,6 +847,11 @@ function scProfile(){
 // ─── BACKEND INTEGRATION ─────────────────────────────────────────────────────
 window.xbrainet = null;
 
+function authHeaders(){
+  const token=window.xbrainet?.token||'';
+  return{'Content-Type':'application/json','Authorization':'Bearer '+token};
+}
+
 async function apiSendOtp(phone){
   try{
     const r=await fetch('/api/auth/send-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone})});
@@ -859,55 +864,84 @@ async function apiVerifyOtp(phone,code){
     const r=await fetch('/api/auth/verify-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,code,lang})});
     const data=await r.json();
     if(data.success){
-      window.xbrainet={userId:data.userId,username:data.username,tier:data.tier,entity:data.entity,brain:data.brain,lang,isNewUser:data.isNewUser};
+      window.xbrainet={token:data.token,userId:data.userId,username:data.username,tier:data.tier,entity:data.entity,brain:data.brain,lang,isNewUser:data.isNewUser};
     }
     return data;
   }catch{return{success:false,error:'Errore di rete. Riprova.'};}
 }
 async function apiSendMessage(message){
-  if(!window.xbrainet?.userId)return null;
-  const{userId,entity,tier,lang}=window.xbrainet;
+  if(!window.xbrainet?.token)return null;
+  const{entity,tier,lang}=window.xbrainet;
   try{
-    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,message,entity,tier,lang})});
+    const r=await fetch('/api/chat',{method:'POST',headers:authHeaders(),body:JSON.stringify({message,entity,tier,lang})});
     const data=await r.json();
     if(data.error==='DAILY_LIMIT_REACHED'){return data.message||null;}
     return data.message||null;
   }catch{return null;}
 }
 async function apiSaveOnboarding(brainData){
-  if(!window.xbrainet?.userId)return;
+  if(!window.xbrainet?.token)return;
   try{
-    await fetch('/api/brain/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:window.xbrainet.userId,data:{...brainData,onboarding_complete:true}})});
+    await fetch('/api/brain/save',{method:'POST',headers:authHeaders(),body:JSON.stringify({data:{...brainData,onboarding_complete:true}})});
     if(window.xbrainet)window.xbrainet.brain=brainData;
   }catch{}
 }
 async function apiExportBrain(){
-  if(!window.xbrainet?.userId){alert('Devi essere registrato per esportare i dati.');return;}
-  window.open('/api/brain/export?userId='+window.xbrainet.userId,'_blank');
+  if(!window.xbrainet?.token){alert('Devi essere registrato per esportare i dati.');return;}
+  try{
+    const r=await fetch('/api/brain/export',{headers:authHeaders()});
+    if(!r.ok)return;
+    const blob=await r.blob();
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='xbrainet-brain-export.json';a.click();
+    URL.revokeObjectURL(url);
+  }catch{}
 }
 async function apiDeleteBrainAndReset(){
-  if(window.xbrainet?.userId){
-    try{await fetch('/api/brain/delete',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:window.xbrainet.userId})});}catch{}
+  if(window.xbrainet?.token){
+    try{await fetch('/api/brain/delete',{method:'DELETE',headers:authHeaders()});}catch{}
     window.xbrainet=null;
   }
   setState({answers:[],messages:[],brainProgress:0,profileConfirmDelete:false,screen:'welcome',userMode:'guest',username:''});
 }
 async function apiCreateBlindspot(questions){
-  if(!window.xbrainet?.userId)return null;
-  const{userId,tier}=window.xbrainet;
+  if(!window.xbrainet?.token)return null;
+  const{tier}=window.xbrainet;
   try{
-    const r=await fetch('/api/blindspot/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,tier,questions})});
+    const r=await fetch('/api/blindspot/create',{method:'POST',headers:authHeaders(),body:JSON.stringify({tier,questions})});
     return r.json();
   }catch{return null;}
 }
 async function apiUpgrade(tier){
-  if(!window.xbrainet?.userId){setState({screen:'register'});return;}
-  const{userId,username}=window.xbrainet;
+  if(!window.xbrainet?.token){setState({screen:'register'});return;}
+  const{username}=window.xbrainet;
   try{
-    const r=await fetch('/api/stripe/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,tier,username})});
+    const r=await fetch('/api/stripe/checkout',{method:'POST',headers:authHeaders(),body:JSON.stringify({tier,username})});
     const data=await r.json();
     if(data.url)window.location.href=data.url;
   }catch{}
+}
+async function apiGenerateNeuralLink(relationLabel){
+  if(!window.xbrainet?.token)return null;
+  const{tier}=window.xbrainet;
+  try{
+    const r=await fetch('/api/keys/generate',{method:'POST',headers:authHeaders(),body:JSON.stringify({tier,relationLabel})});
+    return r.json();
+  }catch{return null;}
+}
+async function apiConnectNeuralLink(sessionKey){
+  if(!window.xbrainet?.token)return null;
+  try{
+    const r=await fetch('/api/keys/connect',{method:'POST',headers:authHeaders(),body:JSON.stringify({sessionKey})});
+    return r.json();
+  }catch{return null;}
+}
+async function apiGetBlindspotReport(token){
+  if(!window.xbrainet?.token)return null;
+  try{
+    const r=await fetch('/api/blindspot/report?token='+encodeURIComponent(token),{headers:authHeaders()});
+    return r.json();
+  }catch{return null;}
 }
 (()=>{const p=new URLSearchParams(window.location.search);if(p.get('upgrade')==='success'){window.history.replaceState({},'','/');}})();
 
