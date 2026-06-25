@@ -18,7 +18,8 @@ create table if not exists users (
   gdpr_consent_at        timestamptz,
   brain_consent_at       timestamptz,
   created_at             timestamptz default now(),
-  last_login             timestamptz default now()
+  last_login             timestamptz default now(),
+  last_message_at        timestamptz
 );
 
 -- DIGITAL BRAIN
@@ -145,3 +146,8 @@ begin
   using row_id;
 end;
 $$;
+
+-- ════════════════════════════════════════════
+-- MIGRATIONS (safe to re-run)
+-- ════════════════════════════════════════════
+alter table users add column if not exists last_message_at timestamptz;

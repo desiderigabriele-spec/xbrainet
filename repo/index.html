@@ -875,7 +875,13 @@ async function apiSendMessage(message){
   try{
     const r=await fetch('/api/chat',{method:'POST',headers:authHeaders(),body:JSON.stringify({message,entity,tier,lang})});
     const data=await r.json();
-    if(data.error==='DAILY_LIMIT_REACHED'){return data.message||null;}
+    if(data.error==='DAILY_LIMIT_REACHED')return data.message||null;
+    if(data.error==='RATE_LIMITED'){
+      const sec=Math.ceil((data.retryAfterMs||1500)/1000);
+      return lang==='it'
+        ?`[ Sistema: attendi ${sec}s prima del prossimo messaggio ]`
+        :`[ System: wait ${sec}s before sending another message ]`;
+    }
     return data.message||null;
   }catch{return null;}
 }

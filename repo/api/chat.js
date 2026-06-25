@@ -4,6 +4,7 @@ import { detectTopic } from '../lib/topic-detector.js';
 import { buildSystemPrompt } from '../lib/system-prompts.js';
 import { updateDigitalBrain } from '../lib/brain-updater.js';
 import { extractAuthUserId } from '../lib/auth.js';
+import { checkRateLimit } from '../lib/ratelimit.js';
 
 const FREE_DAILY_LIMIT = 10;
 
@@ -17,6 +18,18 @@ export default async function handler(req, res) {
   if (!message) return res.status(400).json({ error: 'Message required' });
 
   const userId = authUserId;
+
+  const rl = await checkRateLimit(userId, tier);
+  if (!rl.allowed) {
+    res.setHeader('Retry-After', Math.ceil(rl.retryAfterMs / 1000));
+    return res.status(429).json({
+      error: 'RATE_LIMITED',
+      message: lang === 'it'
+        ? 'Stai inviando messaggi troppo velocemente. Aspetta un momento.'
+        : 'Slow down. Wait a moment before sending another message.',
+      retryAfterMs: rl.retryAfterMs
+    });
+  }
 
   if (tier === 'free') {
     const { data: user } = await supabase
