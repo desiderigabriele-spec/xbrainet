@@ -137,5 +137,6 @@ Nessun `buildCommand` è richiesto: sono funzioni serverless Node in `api/**` + 
 
 ## TODO noti prima del lancio pubblico
 
-- [ ] **`Privacy.dc.html`**: il testo è ancora brandizzato pre-rebrand (TalkWithAlien / OSSERVATORE-7). Va riscritto per XBRAINET e validato da un legale.
+- [ ] **`Privacy.dc.html`**: riscritto per XBRAINET e allineato all'architettura reale (registrazione telefonica, Cervello Digitale persistente su Supabase, Neural Link, BLIND SPOT, Stripe, Anthropic). ⚠️ Resta una **bozza tecnica da far validare da un consulente legale** prima della pubblicazione; completare eventuali placeholder `[…]`.
 - [ ] Il clickwrap in `index.html` indica "bozza da validare da un legale".
+- [ ] Verificare che il dominio email `privacy@xbrainet.com` sia attivo e monitorato.

@@ -3,10 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-<x-dc>
-<helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -20,7 +16,8 @@
   ::-webkit-scrollbar{ width:6px; } ::-webkit-scrollbar-track{ background:#050d07; } ::-webkit-scrollbar-thumb{ background:#0a4d22; border:1px solid #00FF41; }
   @keyframes scanDrift{ 0%{ background-position:0 0; } 100%{ background-position:0 8px; } }
 </style>
-</helmet>
+</head>
+<body>
 
 <div style="position:relative; min-height:100vh; background:#050d07;">
   <!-- scanlines -->
@@ -30,7 +27,7 @@
 
     <!-- top nav -->
     <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(0,255,65,0.2); padding-bottom:12px; margin-bottom:36px; font-size:11px; letter-spacing:2px; color:#00AA2A;">
-      <span>talkwithalien.com</span>
+      <span>XBRAINET</span>
       <a href="/" style="color:#00AA2A; text-decoration:none; font-size:11px;" onmouseover="this.style.color='#00FF41'" onmouseout="this.style.color='#00AA2A'">← torna al canale</a>
     </div>
 
@@ -38,12 +35,17 @@
     <div style="border-left:3px solid #00FFB4; padding-left:18px; margin-bottom:36px;">
       <h1 style="font-size:clamp(18px,3vw,26px); color:#fff; margin:0 0 6px; letter-spacing:1px;">INFORMATIVA SUL TRATTAMENTO DEI DATI PERSONALI</h1>
       <p style="margin:0; font-size:12px; color:#00AA2A; letter-spacing:1px;">ai sensi degli artt. 13–14 del Regolamento (UE) 2016/679 (GDPR)<br>e degli artt. 50–52 del Regolamento (UE) 2024/1689 (AI Act)</p>
-      <p style="margin:8px 0 0; font-size:11px; color:rgba(0,255,65,0.4); letter-spacing:0.5px;">Versione: 1.0 — Data di efficacia: 21 giugno 2026 — Titolare: DESIDERI GABRIELE</p>
+      <p style="margin:8px 0 0; font-size:11px; color:rgba(0,255,65,0.4); letter-spacing:0.5px;">Versione: 2.0 — Data di efficacia: 1 luglio 2026 — Titolare: DESIDERI GABRIELE</p>
+    </div>
+
+    <!-- DRAFT NOTICE -->
+    <div style="margin-bottom:24px; padding:14px 16px; border:1px solid rgba(255,80,80,0.4); background:rgba(30,0,0,0.35);">
+      <p style="margin:0; font-size:12px; color:#ffc0c0; line-height:1.7;"><b style="color:#ff6b6b;">BOZZA —</b> il presente documento descrive l'architettura tecnica reale del servizio ma deve essere revisionato e validato da un consulente legale prima della pubblicazione. I riferimenti tra parentesi quadre <span style="color:#00FFB4;">[…]</span> vanno completati dal Titolare.</p>
     </div>
 
     <!-- SEZIONE 0 — Premessa -->
     <div style="margin-bottom:32px; padding:18px 20px; border:1px solid rgba(255,184,0,0.3); background:rgba(30,15,0,0.35);">
-      <p style="margin:0; font-size:13px; color:#ffe8b0; line-height:1.75;"><b style="color:#FFB800;">NOTA PRELIMINARE —</b> talkwithalien.com è un'esperienza di intrattenimento creativo basata su intelligenza artificiale generativa. Le risposte prodotte dal sistema non costituiscono consulenza psicologica, medica, legale o finanziaria. La presente informativa descrive come vengono trattati i dati personali degli utenti nel rispetto del GDPR e dell'AI Act.</p>
+      <p style="margin:0; font-size:13px; color:#ffe8b0; line-height:1.75;"><b style="color:#FFB800;">NOTA PRELIMINARE —</b> XBRAINET è un'esperienza di intrattenimento creativo basata su intelligenza artificiale generativa. Le entità LYRA, VEGA e AION sono sistemi di IA e non forniscono consulenza psicologica, medica, legale o finanziaria. La presente informativa descrive come vengono trattati i dati personali degli utenti nel rispetto del GDPR e dell'AI Act.</p>
     </div>
 
     <!-- SEZIONE 1 -->
@@ -53,7 +55,7 @@
       <div style="border:1px solid rgba(0,255,65,0.2); background:rgba(0,0,0,0.35); padding:14px 16px; font-size:13px; line-height:1.9;">
         <b style="color:#fff;">DESIDERI GABRIELE</b><br>
         Persona fisica — Creatore indipendente<br>
-        Indirizzo di posta elettronica per le richieste in materia di privacy: <span style="color:#00FFB4;">[EMAIL PRIVACY]</span><br>
+        Indirizzo di posta elettronica per le richieste in materia di privacy: <span style="color:#00FFB4;">privacy@xbrainet.com</span><br>
         Il Titolare non ha nominato un Responsabile della Protezione dei Dati (DPO), in quanto il trattamento non rientra nelle fattispecie previste dagli artt. 37–39 GDPR che ne rendono obbligatoria la designazione.
       </div>
     </div>
@@ -62,32 +64,44 @@
     <div style="margin-bottom:28px;">
       <h2 style="font-size:13px; letter-spacing:2px; color:#00FF41; border-bottom:1px dashed rgba(0,255,65,0.25); padding-bottom:8px; margin:0 0 14px;">▸ 2. DATI TRATTATI, FINALITÀ E BASI GIURIDICHE</h2>
 
-      <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">2.1 — Dati di utilizzo (sessione)</h3>
-      <p style="margin:0 0 14px;"><b>Cosa:</b> le risposte testuali inserite dall'utente durante il flusso di onboarding (nome di fantasia, età, risposte alle 4 domande di profilazione, messaggi nella chat libera).<br><b>Come:</b> questi dati sono elaborati <b style="color:#fff;">esclusivamente in memoria locale del browser</b> (JavaScript in-session). Non vengono trasmessi a server propri del Titolare né salvati in database. <b>Si azzerano automaticamente alla chiusura o al ricaricamento della pagina.</b><br><b>Finalità:</b> generazione della risposta narrativa (il "Cervello Digitale") e personalizzazione dell'esperienza di intrattenimento.<br><b>Base giuridica:</b> esecuzione di un contratto o misure precontrattuali (art. 6, par. 1, lett. b GDPR) — l'utente richiede volontariamente il servizio.</p>
+      <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">2.1 — Dati di registrazione (numero di telefono)</h3>
+      <p style="margin:0 0 14px;"><b>Cosa:</b> per creare un account permanente viene richiesto il numero di telefono, verificato tramite codice OTP inviato via SMS.<br><b>Come:</b> il numero <b style="color:#fff;">non è conservato in chiaro</b>. Ne viene salvato esclusivamente un valore cifrato irreversibile (HMAC-SHA256) utilizzato per riconoscere l'utente agli accessi successivi. Al momento della registrazione viene generato un identificativo di fantasia (ID neurale, es. «VEGA-4718-KM»). L'invio degli SMS è operato da <b style="color:#fff;">Twilio</b> in qualità di responsabile del trattamento.<br><b>Finalità:</b> creazione e autenticazione dell'account.<br><b>Base giuridica:</b> esecuzione del contratto (art. 6, par. 1, lett. b GDPR).</p>
 
-      <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">2.2 — Dati trasmessi al provider di AI (Anthropic / Claude)</h3>
-      <p style="margin:0 0 14px;"><b>Attenzione:</b> nella versione attuale del servizio le risposte del sistema AI sono predefinite (stub). Nella versione con AI live attivata, i messaggi dell'utente verranno trasmessi alle API di <b style="color:#fff;">Anthropic, PBC</b> (Claude) al fine di generare le risposte. In tal caso:<br>— Anthropic opera come <b>responsabile del trattamento</b> (data processor) ai sensi dell'art. 28 GDPR;<br>— Il trattamento avviene su server ubicati <b>negli Stati Uniti</b>, Paese terzo rispetto all'UE. Il trasferimento è fondato sulle <b>Standard Contractual Clauses (SCC)</b> adottate da Anthropic, conformemente all'art. 46, par. 2, lett. c GDPR;<br>— Anthropic non usa i dati trasmessi tramite API per addestrare i propri modelli (come previsto dai relativi Data Processing Agreements);<br>— Per ulteriori informazioni: <a href="https://www.anthropic.com/legal/privacy" target="_blank">https://www.anthropic.com/legal/privacy</a>.<br><b>Base giuridica:</b> art. 6, par. 1, lett. b GDPR (esecuzione del servizio richiesto) e legittimo interesse del Titolare (art. 6, par. 1, lett. f GDPR) alla fornitura del servizio mediante tecnologie AI di terze parti.</p>
+      <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">2.2 — Cervello Digitale e conversazioni (dati persistenti)</h3>
+      <p style="margin:0 0 14px;"><b>Cosa:</b> le risposte di onboarding (alias, età, risposte alle domande di profilazione), i messaggi scambiati nella chat e le sintesi/parole-chiave che il sistema estrae automaticamente da tali messaggi per costruire e aggiornare il «Cervello Digitale».<br><b>Come:</b> per gli utenti registrati questi dati <b style="color:#fff;">sono conservati in un database gestito (Supabase, PostgreSQL)</b> al fine di rendere persistente il profilo tra le sessioni. In modalità ospite (accesso anonimo) i dati restano solo nel browser e non vengono salvati.<br><b>Finalità:</b> personalizzazione dell'esperienza di intrattenimento e continuità del Cervello Digitale.<br><b>Base giuridica:</b> consenso esplicito (art. 6, par. 1, lett. a e, per eventuali dati particolari, art. 9, par. 2, lett. a GDPR), prestato tramite il clickwrap; ed esecuzione del contratto (art. 6, par. 1, lett. b) per la fornitura del servizio.</p>
 
-      <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">2.3 — Dati particolari (categorie speciali ex art. 9 GDPR)</h3>
-      <p style="margin:0 0 14px;">Le risposte alle domande di profilazione potrebbero contenere, <b style="color:#FFB800;">su iniziativa esclusiva dell'utente</b>, informazioni attinenti alla salute psicologica, alla vita affettiva o ad altri aspetti sensibili. Il Titolare non raccoglie né richiede espressamente tali categorie di dati. Si raccomanda di <b style="color:#fff;">non inserire informazioni identificative di terze persone</b> né dati sensibili non necessari. La base giuridica per il trattamento di eventuali dati particolari divulgati spontaneamente dall'utente è l'esplicito consenso (art. 9, par. 2, lett. a GDPR), espresso mediante accettazione del clickwrap.</p>
+      <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">2.3 — Neural Link e BLIND SPOT (funzioni relazionali)</h3>
+      <p style="margin:0 0 14px;"><b>Neural Link:</b> consente di connettere il proprio Cervello Digitale con quello di un'altra persona registrata, mediante una chiave temporanea, per ottenere un'analisi comparativa. L'altra persona non accede direttamente ai tuoi dati; l'attivazione richiede che entrambi gli utenti abbiano accettato i Termini.<br><b>BLIND SPOT:</b> genera un link anonimo per raccogliere feedback di terzi, che vengono aggregati e anonimizzati prima di essere elaborati dall'IA (nessun report è generato con meno di 3 risposte).<br><b>Base giuridica:</b> consenso esplicito degli utenti registrati (art. 6, par. 1, lett. a GDPR) per il Neural Link; legittimo interesse (art. 6, par. 1, lett. f GDPR) per l'elaborazione dei feedback anonimi in BLIND SPOT, di cui i rispondenti sono informati.</p>
 
-      <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">2.4 — Dati tecnici (log di accesso)</h3>
-      <p style="margin:0;">I server web e le CDN che erogano il servizio possono raccogliere automaticamente dati tecnici (indirizzo IP, browser, timestamp di accesso). Tali dati sono trattati esclusivamente per finalità di sicurezza informatica e prevenzione di abusi, per il periodo strettamente necessario (massimo 30 giorni). Base giuridica: legittimo interesse del Titolare (art. 6, par. 1, lett. f GDPR).</p>
+      <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">2.4 — Dati trasmessi al provider di IA (Anthropic / Claude)</h3>
+      <p style="margin:0 0 14px;">I messaggi dell'utente e il contesto del Cervello Digitale sono trasmessi alle API di <b style="color:#fff;">Anthropic, PBC</b> (Claude) per generare le risposte. In tal caso:<br>— Anthropic opera come <b>responsabile del trattamento</b> (data processor) ai sensi dell'art. 28 GDPR;<br>— Il trattamento avviene su server ubicati <b>negli Stati Uniti</b>. Il trasferimento è fondato sulle <b>Standard Contractual Clauses (SCC)</b>, conformemente all'art. 46, par. 2, lett. c GDPR;<br>— Anthropic non usa i dati trasmessi tramite API per addestrare i propri modelli;<br>— Ulteriori informazioni: <a href="https://www.anthropic.com/legal/privacy" target="_blank">anthropic.com/legal/privacy</a>.<br><b>Base giuridica:</b> art. 6, par. 1, lett. b GDPR (esecuzione del servizio) e legittimo interesse (art. 6, par. 1, lett. f).</p>
+
+      <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">2.5 — Dati di pagamento (piani VEGA e AION)</h3>
+      <p style="margin:0 0 14px;">Per gli abbonamenti a pagamento, la transazione è gestita interamente da <b style="color:#fff;">Stripe</b> in qualità di responsabile del trattamento. Il Titolare <b>non riceve né conserva i dati completi della carta</b>: memorizza unicamente identificativi tecnici dell'abbonamento (customer/subscription ID) necessari a gestire lo stato del piano. Base giuridica: esecuzione del contratto (art. 6, par. 1, lett. b GDPR).</p>
+
+      <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">2.6 — Dati particolari (categorie speciali ex art. 9 GDPR)</h3>
+      <p style="margin:0 0 14px;">Le risposte fornite potrebbero contenere, <b style="color:#FFB800;">su iniziativa esclusiva dell'utente</b>, informazioni attinenti alla salute psicologica, alla vita affettiva o ad altri aspetti sensibili. Il Titolare non raccoglie né richiede espressamente tali categorie di dati. Si raccomanda di <b style="color:#fff;">non inserire dati identificativi di terze persone</b> né dati sensibili non necessari. La base giuridica per il trattamento di eventuali dati particolari divulgati spontaneamente è l'esplicito consenso (art. 9, par. 2, lett. a GDPR), espresso mediante il clickwrap.</p>
+
+      <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">2.7 — Dati tecnici (log di accesso)</h3>
+      <p style="margin:0;">I fornitori di infrastruttura e hosting (Vercel per l'applicazione, Supabase per il database) possono raccogliere automaticamente dati tecnici (indirizzo IP, browser, timestamp) e trattano i dati come sub-responsabili/fornitori di infrastruttura. Tali dati sono trattati per finalità di sicurezza informatica e prevenzione di abusi. Base giuridica: legittimo interesse del Titolare (art. 6, par. 1, lett. f GDPR).</p>
     </div>
 
     <!-- SEZIONE 3 -->
     <div style="margin-bottom:28px;">
       <h2 style="font-size:13px; letter-spacing:2px; color:#00FF41; border-bottom:1px dashed rgba(0,255,65,0.25); padding-bottom:8px; margin:0 0 14px;">▸ 3. PERIODO DI CONSERVAZIONE</h2>
-      <p style="margin:0;">I dati elaborati in sessione (sez. 2.1) <b style="color:#fff;">non vengono conservati</b>: si eliminano automaticamente con la chiusura della scheda browser. Non è presente alcuna funzione di archiviazione locale (localStorage/sessionStorage/cookie) né alcun database remoto. I dati tecnici di log (sez. 2.4) sono conservati per un massimo di 30 giorni salvo obbligo di legge o necessità di gestione di un incidente di sicurezza.</p>
+      <p style="margin:0;">Per gli utenti <b>registrati</b>, i dati dell'account e del Cervello Digitale sono conservati fino a quando l'utente non ne richiede la cancellazione (v. Sezione 5) o l'account non viene disattivato. Alla cancellazione, i dati collegati (Cervello Digitale, conversazioni, relazioni, link BLIND SPOT) sono <b style="color:#fff;">eliminati</b> e la riga utente è <b style="color:#fff;">anonimizzata</b> (rimozione dei riferimenti al numero di telefono). Per gli utenti <b>ospiti</b> non è conservato alcun dato lato server. I dati tecnici di log sono conservati per il periodo strettamente necessario, salvo obblighi di legge o gestione di incidenti di sicurezza.</p>
     </div>
 
     <!-- SEZIONE 4 -->
     <div style="margin-bottom:28px;">
       <h2 style="font-size:13px; letter-spacing:2px; color:#00FF41; border-bottom:1px dashed rgba(0,255,65,0.25); padding-bottom:8px; margin:0 0 14px;">▸ 4. COMUNICAZIONE E DIFFUSIONE DEI DATI</h2>
-      <p style="margin:0 0 10px;">I dati personali non sono ceduti, venduti né comunicati a terzi, salvo:</p>
+      <p style="margin:0 0 10px;">I dati personali non sono ceduti, venduti né comunicati a terzi, salvo ai seguenti responsabili/fornitori, ciascuno nei limiti del proprio ruolo tecnico:</p>
       <div style="border-left:2px solid rgba(0,255,65,0.3); padding-left:14px; display:flex; flex-direction:column; gap:8px; font-size:13px;">
-        <div>— <b style="color:#fff;">Anthropic, PBC</b> (provider del modello AI) — in qualità di responsabile del trattamento, limitatamente ai messaggi trasmessi via API (solo con AI live attivata);</div>
-        <div>— provider di infrastruttura e CDN utilizzati per l'erogazione del servizio, nei limiti del loro ruolo tecnico;</div>
+        <div>— <b style="color:#fff;">Anthropic, PBC</b> — provider del modello IA (messaggi trasmessi via API);</div>
+        <div>— <b style="color:#fff;">Supabase</b> — database e hosting dei dati applicativi;</div>
+        <div>— <b style="color:#fff;">Vercel</b> — hosting ed erogazione dell'applicazione;</div>
+        <div>— <b style="color:#fff;">Twilio</b> — invio dei codici OTP via SMS;</div>
+        <div>— <b style="color:#fff;">Stripe</b> — gestione dei pagamenti;</div>
         <div>— autorità pubbliche, ove richiesto da obblighi di legge o provvedimenti dell'autorità giudiziaria.</div>
       </div>
       <p style="margin:10px 0 0;">Non è prevista alcuna <b>diffusione</b> dei dati personali al pubblico.</p>
@@ -104,10 +118,11 @@
         <div><b style="color:#00FFB4;">Limitazione</b> (art. 18) — ottenere la limitazione del trattamento;</div>
         <div><b style="color:#00FFB4;">Portabilità</b> (art. 20) — ricevere i dati in formato strutturato e leggibile da macchina;</div>
         <div><b style="color:#00FFB4;">Opposizione</b> (art. 21) — opporsi al trattamento fondato su legittimo interesse;</div>
+        <div><b style="color:#00FFB4;">Decisioni automatizzate</b> (art. 22) — opporsi al trattamento automatizzato di profilazione;</div>
         <div><b style="color:#00FFB4;">Revoca del consenso</b> (art. 7, par. 3) — in qualsiasi momento, senza pregiudizio per la liceità del trattamento precedente;</div>
-        <div><b style="color:#00FFB4;">Reclamo</b> (art. 77) — proporre reclamo al Garante per la protezione dei dati personali (<a href="https://www.garanteprivacy.it" target="_blank">www.garanteprivacy.it</a>).</div>
+        <div><b style="color:#00FFB4;">Reclamo</b> (art. 77) — proporre reclamo al Garante (<a href="https://www.garanteprivacy.it" target="_blank">www.garanteprivacy.it</a>).</div>
       </div>
-      <p style="margin:10px 0 0; font-size:13px;">Poiché i dati di sessione non vengono conservati, i diritti di cui agli artt. 15-20 GDPR risultano nella pratica già soddisfatti dall'architettura tecnica del servizio (assenza di persistenza). Per esercitare i propri diritti, l'utente può contattare il Titolare all'indirizzo: <span style="color:#00FFB4;">[EMAIL PRIVACY]</span>. Il Titolare risponde entro 30 giorni dalla ricezione della richiesta.</p>
+      <p style="margin:10px 0 0; font-size:13px;">I diritti di <b>portabilità</b> (art. 20) e <b>cancellazione</b> (art. 17) sono esercitabili direttamente dall'utente dalla sezione <b style="color:#00FFB4;">Profilo</b> dell'applicazione (esportazione del Cervello Digitale in formato JSON e cancellazione dei dati). Per gli altri diritti, l'utente può contattare il Titolare all'indirizzo <span style="color:#00FFB4;">privacy@xbrainet.com</span>. Il Titolare risponde entro 30 giorni dalla ricezione della richiesta.</p>
     </div>
 
     <!-- SEZIONE 6 — AI ACT -->
@@ -115,30 +130,30 @@
       <h2 style="font-size:13px; letter-spacing:2px; color:#00FFB4; border-bottom:1px dashed rgba(0,255,180,0.25); padding-bottom:8px; margin:0 0 14px;">▸ 6. INTELLIGENZA ARTIFICIALE — TRASPARENZA (AI ACT, Reg. UE 2024/1689)</h2>
 
       <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">6.1 — Classificazione del sistema AI</h3>
-      <p style="margin:0 0 12px;">Il servizio integra un sistema di IA generativa (Large Language Model) di terze parti (Anthropic — Claude). Ai sensi del Regolamento (UE) 2024/1689 (AI Act), il sistema è classificato come <b style="color:#fff;">sistema AI a rischio limitato</b> (art. 50 AI Act), in quanto interagisce con persone fisiche mediante testo in un contesto di intrattenimento con esplicita dichiarazione della natura AI dell'interlocutore. Il sistema <b style="color:#FFB800;">non rientra</b> nelle categorie ad alto rischio di cui all'Allegato III AI Act: non è utilizzato per fini di valutazione psicologica clinica, selezione del personale, accesso a servizi essenziali né per decisioni con effetti giuridici significativi sulle persone fisiche.</p>
+      <p style="margin:0 0 12px;">Il servizio integra un sistema di IA generativa (Large Language Model) di terze parti (Anthropic — Claude). Ai sensi del Regolamento (UE) 2024/1689 (AI Act), il sistema è classificato come <b style="color:#fff;">sistema AI a rischio limitato</b> (art. 50 AI Act), in quanto interagisce con persone fisiche mediante testo in un contesto di intrattenimento con esplicita dichiarazione della natura AI dell'interlocutore. Il sistema <b style="color:#FFB800;">non rientra</b> nelle categorie ad alto rischio di cui all'Allegato III AI Act.</p>
 
       <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500;">6.2 — Obblighi di trasparenza (art. 50 AI Act)</h3>
-      <p style="margin:0 0 12px;">In conformità all'art. 50, par. 1 AI Act, gli utenti sono informati — in modo chiaro, prima di qualsiasi interazione — che stanno interagendo con un sistema di intelligenza artificiale e non con una persona fisica. Tale informazione è fornita mediante:</p>
+      <p style="margin:0 0 12px;">In conformità all'art. 50, par. 1 AI Act, gli utenti sono informati — in modo chiaro, prima di qualsiasi interazione — che stanno interagendo con un sistema di intelligenza artificiale. Tale informazione è fornita mediante:</p>
       <div style="border-left:2px solid rgba(0,255,180,0.4); padding-left:14px; font-size:13px; display:flex; flex-direction:column; gap:6px;">
         <div>(a) la schermata di clickwrap obbligatorio che precede l'accesso al servizio;</div>
-        <div>(b) il banner permanente visibile su tutte le schermate: <i>"OSSERVATORE-7 È UN SISTEMA AI"</i>;</div>
-        <div>(c) la narrativa esplicita del servizio che qualifica OSSERVATORE-7 come personaggio finzionale interpretato da un'AI.</div>
+        <div>(b) il banner permanente visibile su tutte le schermate: <i>"LYRA, VEGA e AION sono sistemi di intelligenza artificiale"</i>;</div>
+        <div>(c) la narrativa esplicita del servizio che qualifica le entità come personaggi finzionali interpretati da un'AI.</div>
       </div>
 
       <h3 style="font-size:12px; color:#00FFB4; letter-spacing:1px; margin:0 0 8px; font-weight:500; margin-top:12px;">6.3 — Contenuti generati dall'AI e limitazioni</h3>
-      <p style="margin:0;">Le risposte generate dal sistema AI sono di natura <b style="color:#fff;">generativa e probabilistica</b>: possono contenere imprecisioni, informazioni non aggiornate o affermazioni non veritiere ("allucinazioni"). Il Titolare non garantisce l'accuratezza, la completezza o l'idoneità dei contenuti generati per scopi diversi dall'intrattenimento. L'utente è l'unico responsabile delle decisioni assunte a partire dalle risposte del sistema.</p>
+      <p style="margin:0;">Le risposte generate dal sistema AI sono di natura <b style="color:#fff;">generativa e probabilistica</b>: possono contenere imprecisioni o affermazioni non veritiere ("allucinazioni"). Il Titolare non garantisce l'accuratezza dei contenuti generati per scopi diversi dall'intrattenimento. L'analisi automatizzata dei messaggi per costruire il Cervello Digitale costituisce un trattamento automatizzato ai sensi dell'art. 22 GDPR, cui l'utente può opporsi (v. Sezione 5).</p>
     </div>
 
     <!-- SEZIONE 7 -->
     <div style="margin-bottom:28px;">
       <h2 style="font-size:13px; letter-spacing:2px; color:#00FF41; border-bottom:1px dashed rgba(0,255,65,0.25); padding-bottom:8px; margin:0 0 14px;">▸ 7. COOKIE E TECNOLOGIE DI TRACCIAMENTO</h2>
-      <p style="margin:0;">Il servizio <b style="color:#fff;">non utilizza cookie di profilazione né strumenti di tracciamento comportamentale</b>. Possono essere impiegate tecnologie tecniche strettamente necessarie all'erogazione del servizio (es. sessioni di navigazione volatili). Nessun dato è condiviso con reti pubblicitarie né con soggetti terzi a fini di marketing.</p>
+      <p style="margin:0;">Il servizio <b style="color:#fff;">non utilizza cookie di profilazione né strumenti di tracciamento comportamentale a fini pubblicitari</b>. Sono impiegate esclusivamente tecnologie tecniche strettamente necessarie all'erogazione del servizio (es. token di sessione per mantenere l'autenticazione). Nessun dato è condiviso con reti pubblicitarie.</p>
     </div>
 
     <!-- SEZIONE 8 -->
     <div style="margin-bottom:28px;">
       <h2 style="font-size:13px; letter-spacing:2px; color:#00FF41; border-bottom:1px dashed rgba(0,255,65,0.25); padding-bottom:8px; margin:0 0 14px;">▸ 8. SICUREZZA DEI DATI (art. 32 GDPR)</h2>
-      <p style="margin:0;">Il Titolare adotta misure tecniche e organizzative adeguate a garantire un livello di sicurezza proporzionato al rischio, tra cui: trasmissione cifrata tramite protocollo HTTPS/TLS; architettura client-side che minimizza l'esposizione dei dati (trattamento in-browser, nessuna persistenza server-side); aggiornamento periodico delle dipendenze software. In caso di violazione dei dati personali (data breach) che presenti un rischio per i diritti e le libertà degli interessati, il Titolare notificherà l'Autorità Garante entro 72 ore dalla scoperta (art. 33 GDPR).</p>
+      <p style="margin:0;">Il Titolare adotta misure tecniche e organizzative adeguate al rischio, tra cui: trasmissione cifrata tramite HTTPS/TLS; conservazione del numero di telefono unicamente in forma cifrata irreversibile (HMAC); autenticazione tramite token firmati; isolamento dei dati per utente. In caso di violazione dei dati personali (data breach) che presenti un rischio per i diritti e le libertà degli interessati, il Titolare notificherà l'Autorità Garante entro 72 ore dalla scoperta (art. 33 GDPR).</p>
     </div>
 
     <!-- SEZIONE 9 -->
@@ -150,7 +165,7 @@
     <!-- SEZIONE 10 -->
     <div style="margin-bottom:28px;">
       <h2 style="font-size:13px; letter-spacing:2px; color:#00FF41; border-bottom:1px dashed rgba(0,255,65,0.25); padding-bottom:8px; margin:0 0 14px;">▸ 10. MODIFICHE ALLA PRESENTE INFORMATIVA</h2>
-      <p style="margin:0;">Il Titolare si riserva il diritto di aggiornare la presente informativa per adeguarla a modifiche normative, tecnologiche o operative. Le versioni aggiornate saranno pubblicate su questa pagina con indicazione della data di efficacia. In caso di modifiche sostanziali che incidano sui diritti degli interessati, sarà fornita adeguata comunicazione tramite il sito. La data di ultima modifica è indicata in cima alla presente pagina.</p>
+      <p style="margin:0;">Il Titolare si riserva il diritto di aggiornare la presente informativa per adeguarla a modifiche normative, tecnologiche o operative. Le versioni aggiornate saranno pubblicate su questa pagina con indicazione della data di efficacia. In caso di modifiche sostanziali che incidano sui diritti degli interessati, sarà fornita adeguata comunicazione tramite il sito.</p>
     </div>
 
     <!-- SEZIONE 11 -->
@@ -159,20 +174,18 @@
       <div style="border:1px solid rgba(0,255,65,0.2); background:rgba(0,0,0,0.35); padding:14px 16px; font-size:13px; line-height:2;">
         <b style="color:#fff;">DESIDERI GABRIELE</b><br>
         Titolare del trattamento<br>
-        Per tutte le richieste relative ai dati personali: <span style="color:#00FFB4;">[EMAIL PRIVACY]</span><br>
+        Per tutte le richieste relative ai dati personali: <span style="color:#00FFB4;">privacy@xbrainet.com</span><br>
         Garante Privacy italiano: <a href="https://www.garanteprivacy.it" target="_blank">www.garanteprivacy.it</a> — tel. 06.69677.1
       </div>
     </div>
 
     <!-- footer -->
     <div style="border-top:1px solid rgba(0,255,65,0.15); padding-top:16px; font-size:10px; color:rgba(0,255,65,0.28); letter-spacing:1px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-      <span>talkwithalien.com — DESIDERI GABRIELE — Informativa Privacy v1.0</span>
-      <span>21 giugno 2026</span>
+      <span>XBRAINET — DESIDERI GABRIELE — Informativa Privacy v2.0</span>
+      <span>1 luglio 2026</span>
     </div>
 
   </div>
 </div>
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:900,&quot;height&quot;:1200}}"></script>
 </body>
 </html>
