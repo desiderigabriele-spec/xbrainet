@@ -1,0 +1,12 @@
+{
+  "name": "xbrainet",
+  "version": "2.0.0",
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.0",
+    "@supabase/supabase-js": "^2.43.0",
+    "bcryptjs": "^2.4.3",
+    "stripe": "^15.0.0",
+    "twilio": "^5.0.0"
+  }
+}
