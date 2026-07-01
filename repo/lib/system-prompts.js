@@ -1,8 +1,8 @@
 export function buildSystemPrompt(entity, brain, topic, lang = 'en') {
-  const brainContext = brain ? buildBrainContext(brain, topic) : '';
+  const brainContext = brain ? buildBrainContext(brain, topic, lang) : '';
   const personality  = getEntityPersonality(entity, lang);
   const langInstruction = lang === 'it'
-    ? 'Respond in Italian.'
+    ? 'Rispondi sempre in italiano.'
     : `Detect the language of the user message and respond in that same language. If unsure, respond in English.`;
 
   return `
@@ -51,15 +51,14 @@ Use these terms consistently (not alien/frequency language):
 ${personality}
 
 ━━━ DIGITAL BRAIN CONTEXT ━━━
-${brainContext}
+${brainContext || (lang === 'it' ? 'Nessun Cervello Digitale ancora mappato. Procedi con l\'analisi del messaggio corrente.' : 'No Digital Brain mapped yet. Analyse the current message directly.')}
 
 ━━━ RESPONSE STYLE ━━━
 - Default: 2-4 sentences. Precise. No exclamation marks. No false warmth.
 - If user asks to elaborate: max 8-10 sentences.
-- Reference brain context naturally — never say "according to your profile"
+- Reference brain context naturally — never say "according to your profile" or "your data shows"
 - Off-topic requests (news, coding, recipes):
-  "This is outside the Neural Network's frequency.
-   I'm here to map your mind — not the noise around it."
+  "${lang === 'it' ? 'Questa frequenza non appartiene alla Rete Neurale. Sono qui per mappare la tua mente — non il rumore intorno ad essa.' : 'This is outside the Neural Network\'s frequency. I\'m here to map your mind — not the noise around it.'}"
 `;
 }
 
@@ -113,9 +112,54 @@ Capacità: Neural Link completo + delta comportamentale tra relazioni.`
   return P[entity]?.[lang] || P[entity]?.en || P['LYRA'].en;
 }
 
-function buildBrainContext(brain, topic) {
-  if (!brain || !topic || topic === 'altro') return '';
+const LABEL = {
+  en: {
+    base: 'CORE COGNITIVE MAP',
+    alias: 'Name in channel',
+    age: 'Age',
+    area: 'Primary mapping area',
+    energy: 'Current energy state',
+    decision: 'Decision protocol',
+    focus: 'Universal focus',
+    topic: 'ACTIVE TOPIC',
+    patterns: 'Observed patterns',
+    map: 'Cognitive map',
+    note: 'Use this context to personalise your response. Reference it naturally as part of your cosmic observation — never say "according to your profile" or "I see in your data".'
+  },
+  it: {
+    base: 'MAPPA COGNITIVA FONDAMENTALE',
+    alias: 'Nome nel canale',
+    age: 'Età',
+    area: 'Area di mappatura primaria',
+    energy: 'Stato energetico attuale',
+    decision: 'Protocollo decisionale',
+    focus: 'Focus universale',
+    topic: 'TOPIC ATTIVO',
+    patterns: 'Pattern osservati',
+    map: 'Mappa cognitiva',
+    note: 'Usa questo contesto per personalizzare la risposta. Fai riferimento naturalmente come parte della tua osservazione cosmica — non dire mai "secondo il tuo profilo" o "vedo nei tuoi dati".'
+  }
+};
 
+function buildBrainContext(brain, topic, lang = 'en') {
+  if (!brain) return '';
+  const L = LABEL[lang] || LABEL.en;
+  const lines = [];
+
+  // ── Base onboarding data (always present if onboarding complete) ──
+  const baseLines = [];
+  if (brain.alias)                  baseLines.push(`${L.alias}: ${brain.alias}`);
+  if (brain.age)                    baseLines.push(`${L.age}: ${brain.age}`);
+  if (brain.area_primaria)          baseLines.push(`${L.area}: ${brain.area_primaria}`);
+  if (brain.stato_energetico)       baseLines.push(`${L.energy}: ${brain.stato_energetico}`);
+  if (brain.protocollo_decisionale) baseLines.push(`${L.decision}: ${brain.protocollo_decisionale}`);
+  if (brain.focus_universale)       baseLines.push(`${L.focus}: ${brain.focus_universale}`);
+
+  if (baseLines.length) {
+    lines.push(`${L.base}:\n${baseLines.join('\n')}`);
+  }
+
+  // ── Topic-specific deep data ──
   const topicMap = {
     amore:     { k: brain.keywords_amore,     s: brain.sintesi_amore },
     lavoro:    { k: brain.keywords_lavoro,     s: brain.sintesi_lavoro },
@@ -125,16 +169,14 @@ function buildBrainContext(brain, topic) {
     energia:   { k: brain.keywords_energia,    s: brain.sintesi_energia },
   };
 
-  const section = topicMap[topic];
-  if (!section || (!section.k?.length && !section.s)) return '';
+  const section = topic && topic !== 'altro' ? topicMap[topic] : null;
+  if (section && (section.k?.length || section.s)) {
+    const topicLines = [];
+    if (section.k?.length) topicLines.push(`${L.patterns}: ${section.k.join(', ')}`);
+    if (section.s)         topicLines.push(`${L.map}: ${section.s}`);
+    lines.push(`${L.topic} (${topic.toUpperCase()}):\n${topicLines.join('\n')}`);
+  }
 
-  return `
-DIGITAL BRAIN — ${topic.toUpperCase()} SECTION:
-${section.k?.length ? `Patterns: ${section.k.join(', ')}` : ''}
-${section.s ? `Cognitive map: ${section.s}` : ''}
-
-Use this context to personalize your response.
-Never explicitly say "according to your profile" or "I see in your data".
-Reference it naturally as part of your cosmic observation.
-`;
+  if (!lines.length) return '';
+  return lines.join('\n\n') + `\n\n${L.note}`;
 }
