@@ -166,7 +166,8 @@ let S={
   archiveOpen:{},
   bsChecks:new Array(5).fill(false),bsCustomText:'',bsGenerated:false,bsLink:'',bsLinkText:'',
   nlTab:'generate',nlLabel:'',nlKey:'',nlKeyText:'',nlBusy:false,nlError:'',
-  nlConnectInput:'',nlConnectResult:'',nlConnectLabel:'',
+  nlConnectInput:'',nlConnectResult:'',nlConnectLabel:'',nlRelationId:'',
+  nlAnalysis:'',nlAnalysisBusy:false,
   profileConfirmDelete:false
 };
 let _ec0='0,255,65',_ecLight='180,255,195',_ecDark='0,199,51';
@@ -831,7 +832,11 @@ function scNeuralLink(){
       </div>
       <button onclick="connectNeuralLink()" ${S.nlBusy?'disabled':''} style="width:100%;background:rgba(0,255,180,.08);border:1px solid rgba(0,255,180,.5);color:#00FFB4;font-size:14px;font-weight:700;letter-spacing:1.5px;padding:16px;cursor:${S.nlBusy?'wait':'pointer'};" onmouseover="if(!${S.nlBusy}){this.style.background='rgba(0,255,180,.18)';this.style.boxShadow='0 0 24px rgba(0,255,180,.3)'}" onmouseout="this.style.background='rgba(0,255,180,.08)';this.style.boxShadow=''">${S.nlBusy?'[ CONNESSIONE… ]':'[ STABILISCI NEURAL LINK ]'}</button>`
       :`<div style="border:1px solid rgba(0,255,65,.3);background:rgba(0,0,0,.55);padding:22px;white-space:pre-wrap;font-size:14px;line-height:1.9;color:#00FF41;text-shadow:0 0 8px rgba(0,255,65,.35);">${esc(S.nlConnectResult)}</div>
-      <button onclick="setState({nlConnectResult:'',nlConnectInput:'',nlConnectLabel:''})" style="margin-top:16px;background:transparent;border:1px solid rgba(0,255,65,.25);color:#0a7d33;font-size:12px;padding:12px 16px;cursor:pointer;" onmouseover="this.style.color='#00FF41';this.style.borderColor='#00FF41'" onmouseout="this.style.color='#0a7d33';this.style.borderColor='rgba(0,255,65,.25)'">[ NUOVA CONNESSIONE ]</button>`}
+      ${S.nlAnalysis
+        ?`<div style="margin-top:16px;border:1px solid rgba(0,255,180,.4);background:rgba(0,14,10,.7);padding:22px;white-space:pre-wrap;font-size:13.5px;line-height:1.85;color:#bff5cc;text-shadow:0 0 6px rgba(0,255,180,.2);"><div style="font-size:10px;letter-spacing:2px;color:#00FFB4;margin-bottom:14px;">▸ ANALISI COMPARATIVA — ${esc(S.nlConnectLabel||'connection')}</div>${esc(S.nlAnalysis)}</div>
+        <div style="font-size:9px;color:#0a7d33;letter-spacing:.5px;margin-top:8px;line-height:1.5;">Simulazione a scopo riflessivo e ricreativo. Non vincolante, priva di valore legale.</div>`
+        :`<button onclick="analyzeNeuralLink()" ${S.nlAnalysisBusy||!S.nlRelationId?'disabled':''} style="margin-top:16px;width:100%;background:rgba(0,255,180,.08);border:1px solid rgba(0,255,180,.5);color:#00FFB4;font-size:13px;font-weight:700;letter-spacing:1.5px;padding:15px;cursor:${S.nlAnalysisBusy?'wait':'pointer'};" onmouseover="if(!${S.nlAnalysisBusy}){this.style.background='rgba(0,255,180,.18)';this.style.boxShadow='0 0 24px rgba(0,255,180,.3)'}" onmouseout="this.style.background='rgba(0,255,180,.08)';this.style.boxShadow=''">${S.nlAnalysisBusy?'[ ANALISI IN CORSO… ]':'[ GENERA ANALISI COMPARATIVA ]'}</button>`}
+      <button onclick="setState({nlConnectResult:'',nlConnectInput:'',nlConnectLabel:'',nlRelationId:'',nlAnalysis:''})" style="margin-top:12px;background:transparent;border:1px solid rgba(0,255,65,.25);color:#0a7d33;font-size:12px;padding:12px 16px;cursor:pointer;" onmouseover="this.style.color='#00FF41';this.style.borderColor='#00FF41'" onmouseout="this.style.color='#0a7d33';this.style.borderColor='rgba(0,255,65,.25)'">[ NUOVA CONNESSIONE ]</button>`}
     </div>`;
   }
   return `<div style="position:relative;z-index:5;min-height:100vh;overflow-y:auto;padding:clamp(20px,4vw,60px) clamp(16px,3vw,40px);">
@@ -1001,6 +1006,14 @@ async function apiConnectNeuralLink(sessionKey){
   if(!window.xbrainet?.token)return null;
   try{
     const r=await fetch('/api/keys/connect',{method:'POST',headers:authHeaders(),body:JSON.stringify({sessionKey})});
+    return r.json();
+  }catch{return null;}
+}
+async function apiAnalyzeNeuralLink(relationId){
+  if(!window.xbrainet?.token)return null;
+  const{tier,lang}=window.xbrainet;
+  try{
+    const r=await fetch('/api/keys/analyze',{method:'POST',headers:authHeaders(),body:JSON.stringify({relationId,tier,lang})});
     return r.json();
   }catch{return null;}
 }
@@ -1356,7 +1369,7 @@ async function generateBsLink(){
 function copyBsLink(){try{navigator.clipboard.writeText(/^https?:\/\//.test(S.bsLink)?S.bsLink:'https://'+S.bsLink);}catch(e){}}
 
 // Neural Link
-function openNeuralLink(){upd(s=>({prevScreen:s.screen,screen:'neurallink',nlTab:'generate',nlKey:'',nlKeyText:'',nlLabel:'',nlConnectInput:'',nlConnectResult:'',nlConnectLabel:'',nlError:'',nlBusy:false}));render();}
+function openNeuralLink(){upd(s=>({prevScreen:s.screen,screen:'neurallink',nlTab:'generate',nlKey:'',nlKeyText:'',nlLabel:'',nlConnectInput:'',nlConnectResult:'',nlConnectLabel:'',nlRelationId:'',nlAnalysis:'',nlAnalysisBusy:false,nlError:'',nlBusy:false}));render();}
 function closeNeuralLink(){upd(s=>({screen:s.prevScreen}));render();}
 async function generateNeuralLink(){
   if(S.nlBusy)return;
@@ -1377,8 +1390,18 @@ async function connectNeuralLink(){
   const data=await apiConnectNeuralLink(key);
   if(!data?.success){setState({nlBusy:false,nlError:data?.error||'Connessione fallita. Verifica la chiave.'});return;}
   const label=data.label||'connection';
-  const text=`> VERIFICA CHIAVE...\n> ████████████████ 100%\n>\n> NEURAL LINK STABILITO\n>\n> Etichetta: ${label}\n> I due Cervelli Digitali sono ora connessi nella Rete Neurale.\n> L'analisi comparativa sarà disponibile a breve.`;
-  setState({nlBusy:false,nlConnectResult:text,nlConnectLabel:label});
+  const text=`> VERIFICA CHIAVE...\n> ████████████████ 100%\n>\n> NEURAL LINK STABILITO\n>\n> Etichetta: ${label}\n> I due Cervelli Digitali sono ora connessi nella Rete Neurale.`;
+  setState({nlBusy:false,nlConnectResult:text,nlConnectLabel:label,nlRelationId:data.relationId||'',nlAnalysis:''});
+}
+async function analyzeNeuralLink(){
+  if(S.nlAnalysisBusy||!S.nlRelationId)return;
+  setState({nlAnalysisBusy:true,nlError:''});
+  const data=await apiAnalyzeNeuralLink(S.nlRelationId);
+  if(data?.error==='CONNECTION_PENDING'||data?.error==='BRAIN_INCOMPLETE'||data?.error==='UPGRADE_REQUIRED'){
+    setState({nlAnalysisBusy:false,nlError:data.message||'Analisi non disponibile.'});return;
+  }
+  if(!data?.analysis){setState({nlAnalysisBusy:false,nlError:'Generazione analisi fallita. Riprova.'});return;}
+  setState({nlAnalysisBusy:false,nlAnalysis:data.analysis});
 }
 function copyNeuralKey(){try{navigator.clipboard.writeText(S.nlKey);}catch(e){}}
 
