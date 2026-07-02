@@ -10,7 +10,7 @@
 <style>
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;background:var(--bg);}
-body{font-family:'JetBrains Mono',monospace;color:var(--accent);}
+body{font-family:'JetBrains Mono',monospace;color:var(--text);font-weight:500;font-size:15px;}
 ::selection{background:var(--accent);color:#000;}
 ::-webkit-scrollbar{width:8px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
@@ -31,7 +31,7 @@ input,textarea,button{font-family:'JetBrains Mono',monospace;}
 @keyframes orb-dot-pulse{from{transform:scale(1);}to{transform:scale(1.8);}}
 @keyframes orb-label-blink{0%,100%{opacity:1;}50%{opacity:0;}}
 :root{--accent:#00FF41;--accent-rgb:0,255,65;--accent-mid:rgba(var(--accent-rgb),.62);--accent-dim:rgba(var(--accent-rgb),.42);--entity-hex:var(--accent);--bg:#000;--panel-rgb:0,0,0;--text:#fff;--text-soft:#bff5cc;}
-:root[data-mode="light"]{--bg:#eef1ee;--panel-rgb:255,255,255;--text:#0a0a0a;--text-soft:#2e4633;}
+:root[data-mode="light"]{--bg:#eef1ee;--panel-rgb:255,255,255;--text:#0a0a0a;--text-soft:#1c3016;--accent-mid:rgba(var(--accent-rgb),.95);--accent-dim:rgba(var(--accent-rgb),.78);}
 :root[data-mode="light"] #matrix-canvas{display:none;}
 #orb-container{position:relative;width:340px;height:340px;display:flex;align-items:center;justify-content:center;}
 #orb-glow{position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(var(--accent-rgb),.18) 0%,rgba(0,200,50,.08) 40%,transparent 70%);animation:orb-breathe 3s ease-in-out infinite;pointer-events:none;}
@@ -47,8 +47,8 @@ input,textarea,button{font-family:'JetBrains Mono',monospace;}
 .entity-name{font-family:'Orbitron',monospace;font-weight:700;letter-spacing:0.15em;}
 .brand-title{font-family:'Orbitron',monospace;font-weight:700;letter-spacing:0.12em;}
 .orb-entity-name{font-family:'Orbitron',monospace;font-size:20px;font-weight:700;letter-spacing:0.18em;color:var(--entity-hex);text-shadow:0 0 20px var(--entity-hex);}
-.orb-entity-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.35em;color:rgba(var(--accent-rgb),.45);margin-top:5px;}
-.orb-freq-line{font-family:'JetBrains Mono',monospace;font-size:9px;color:#FFB800;letter-spacing:.25em;margin-top:4px;animation:orb-label-blink 2s step-end infinite;}
+.orb-entity-sub{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.35em;color:rgba(var(--accent-rgb),.45);margin-top:5px;}
+.orb-freq-line{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#FFB800;letter-spacing:.25em;margin-top:4px;animation:orb-label-blink 2s step-end infinite;}
 .caret{display:inline-block;width:9px;height:1.05em;background:var(--accent);margin-left:2px;vertical-align:-2px;animation:caret 1s steps(1) infinite;}
 .caret-sm{display:inline-block;width:8px;height:1em;background:var(--accent);margin-left:2px;vertical-align:-1px;animation:caret 1s steps(1) infinite;}
 #app{animation:flicker 6s infinite;min-height:100vh;}
@@ -61,7 +61,7 @@ input,textarea,button{font-family:'JetBrains Mono',monospace;}
 <div style="position:fixed;inset:0;z-index:51;pointer-events:none;background:linear-gradient(rgba(var(--accent-rgb),0.025),rgba(var(--accent-rgb),0.025));"></div>
 <div id="glitch-overlay" style="display:none;position:fixed;left:0;right:0;top:38%;height:42px;z-index:52;pointer-events:none;background:repeating-linear-gradient(90deg,rgba(255,0,60,0.18) 0 3px,rgba(0,220,255,0.16) 3px 6px,transparent 6px 14px);mix-blend-mode:screen;animation:glitchSlide .09s steps(2) infinite alternate;"></div>
 <div id="app" style="position:relative;z-index:5;"></div>
-<div id="footer" style="position:fixed;left:0;right:0;bottom:4px;z-index:60;pointer-events:none;text-align:center;font-size:8px;letter-spacing:1.5px;color:rgba(var(--accent-rgb),.3);">[ XBRAINET — ESPERIENZA DI INTRATTENIMENTO CREATIVO — LYRA, VEGA E AION SONO SISTEMI DI INTELLIGENZA ARTIFICIALE ]</div>
+<div id="footer" style="position:fixed;left:0;right:0;bottom:4px;z-index:60;pointer-events:none;text-align:center;font-size:10px;letter-spacing:1.5px;color:rgba(var(--accent-rgb),.3);">[ XBRAINET — ESPERIENZA DI INTRATTENIMENTO CREATIVO — LYRA, VEGA E AION SONO SISTEMI DI INTELLIGENZA ARTIFICIALE ]</div>
 <script>
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const EC={
@@ -321,36 +321,36 @@ function render(){
 // ─── SCREEN: WELCOME ─────────────────────────────────────────────────────────
 function scWelcome(){
   const isLight=document.documentElement.getAttribute('data-mode')==='light';
-  const modeBtn=(m,label)=>{const on=(m==='light')===isLight;return `<button onclick="setMode('${m}')" style="background:${on?'var(--accent)':'transparent'};color:${on?'#000':'var(--accent)'};border:1px solid var(--accent);font-size:10px;font-weight:700;letter-spacing:1.5px;padding:6px 16px;cursor:pointer;transition:all .2s;">${label}</button>`;};
+  const modeBtn=(m,label)=>{const on=(m==='light')===isLight;return `<button onclick="setMode('${m}')" style="background:${on?'var(--accent)':'transparent'};color:${on?'#000':'var(--accent)'};border:1px solid var(--accent);font-size:11.5px;font-weight:700;letter-spacing:1.5px;padding:6px 16px;cursor:pointer;transition:all .2s;">${label}</button>`;};
   return `<div style="position:relative;z-index:5;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(20px,4vw,60px);">
   <div style="text-align:center;margin-bottom:36px;">
     <div class="brand-title" style="font-size:clamp(26px,6vw,58px);color:var(--text);text-shadow:0 0 30px rgba(var(--accent-rgb),0.45);line-height:1;margin-bottom:14px;">XBRAINET</div>
     <div style="font-size:11px;letter-spacing:4px;color:rgba(var(--accent-rgb),0.55);">Rete Neurale Cosmica — Connessione Neurale — Leggi Universali</div>
   </div>
   <div style="text-align:center;margin-bottom:28px;">
-    <div style="font-size:9px;letter-spacing:2px;color:var(--accent-dim);margin-bottom:10px;">[ FREQUENZA DEL SEGNALE ]</div>
+    <div style="font-size:10.5px;letter-spacing:2px;color:var(--accent-dim);margin-bottom:10px;">[ FREQUENZA DEL SEGNALE ]</div>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">${THEMES.map(t=>`<button onclick="setTheme('${t.hex}','${t.rgb}')" title="${t.name}" style="width:26px;height:26px;border-radius:50%;cursor:pointer;background:${t.hex};border:2px solid ${_accentHex===t.hex?'var(--text)':'rgba(128,128,128,.4)'};box-shadow:0 0 ${_accentHex===t.hex?'14px':'6px'} ${t.hex};transition:all .2s;padding:0;" onmouseover="this.style.transform='scale(1.18)'" onmouseout="this.style.transform='scale(1)'"></button>`).join('')}</div>
-    <div style="font-size:9px;letter-spacing:2px;color:var(--accent-dim);margin:16px 0 10px;">[ SFONDO ]</div>
+    <div style="font-size:10.5px;letter-spacing:2px;color:var(--accent-dim);margin:16px 0 10px;">[ SFONDO ]</div>
     <div style="display:flex;gap:8px;justify-content:center;">${modeBtn('dark','DARK')}${modeBtn('light','LIGHT')}</div>
   </div>
   <div style="width:100%;max-width:480px;display:flex;flex-direction:column;gap:12px;">
     <button onclick="goRegister()" style="text-align:left;background:rgba(var(--panel-rgb),0.55);border:1px solid rgba(0,255,180,0.32);color:var(--text);padding:18px 22px;cursor:pointer;width:100%;transition:all .2s;" onmouseover="this.style.borderColor='#00FFB4';this.style.background='rgba(0,255,180,0.07)';this.style.boxShadow='0 0 22px rgba(0,255,180,0.22)'" onmouseout="this.style.borderColor='rgba(0,255,180,0.32)';this.style.background='rgba(var(--panel-rgb),0.55)';this.style.boxShadow=''">
       <div style="font-size:11px;letter-spacing:2px;color:#00FFB4;margin-bottom:7px;font-weight:700;">[ NUOVA CONNESSIONE ]</div>
       <div style="font-size:13px;color:var(--text-soft);line-height:1.5;">Prima volta su XBRAINET? Registrati e costruisci il tuo Cervello Digitale nella Rete Neurale Cosmica</div>
-      <div style="font-size:10.5px;color:var(--accent-dim);margin-top:8px;letter-spacing:.5px;">→ Registrazione con numero di telefono</div>
+      <div style="font-size:12px;color:var(--accent-dim);margin-top:8px;letter-spacing:.5px;">→ Registrazione con numero di telefono</div>
     </button>
     <button onclick="goLogin()" style="text-align:left;background:rgba(var(--panel-rgb),0.55);border:1px solid rgba(0,255,180,0.32);color:var(--text);padding:18px 22px;cursor:pointer;width:100%;transition:all .2s;" onmouseover="this.style.borderColor='#00FFB4';this.style.background='rgba(0,255,180,0.07)';this.style.boxShadow='0 0 22px rgba(0,255,180,0.22)'" onmouseout="this.style.borderColor='rgba(0,255,180,0.32)';this.style.background='rgba(var(--panel-rgb),0.55)';this.style.boxShadow=''">
       <div style="font-size:11px;letter-spacing:2px;color:#00FFB4;margin-bottom:7px;font-weight:700;">[ RICONNETTI ]</div>
       <div style="font-size:13px;color:var(--text-soft);line-height:1.5;">Hai già un ID neurale assegnato? Rientra nella Rete</div>
-      <div style="font-size:10.5px;color:var(--accent-dim);margin-top:8px;letter-spacing:.5px;">→ Accesso rapido con codice OTP</div>
+      <div style="font-size:12px;color:var(--accent-dim);margin-top:8px;letter-spacing:.5px;">→ Accesso rapido con codice OTP</div>
     </button>
     <button onclick="goAnonymous()" style="text-align:left;background:rgba(var(--panel-rgb),0.55);border:1px solid rgba(var(--accent-rgb),0.22);color:var(--text);padding:18px 22px;cursor:pointer;width:100%;transition:all .2s;" onmouseover="this.style.borderColor='var(--accent)';this.style.background='rgba(var(--accent-rgb),0.05)';this.style.boxShadow='0 0 18px rgba(var(--accent-rgb),0.14)'" onmouseout="this.style.borderColor='rgba(var(--accent-rgb),0.22)';this.style.background='rgba(var(--panel-rgb),0.55)';this.style.boxShadow=''">
       <div style="font-size:11px;letter-spacing:2px;color:var(--accent-mid);margin-bottom:7px;font-weight:700;">[ ACCESSO ANONIMO ]</div>
       <div style="font-size:13px;color:var(--text-soft);line-height:1.5;">Esplora senza registrarti. Sessione temporanea — nessun dato salvato</div>
-      <div style="font-size:10.5px;color:var(--accent-dim);margin-top:8px;letter-spacing:.5px;">Solo LYRA disponibile in modalità ospite → Continua nella Rete</div>
+      <div style="font-size:12px;color:var(--accent-dim);margin-top:8px;letter-spacing:.5px;">Solo LYRA disponibile in modalità ospite → Continua nella Rete</div>
     </button>
   </div>
-  <div style="margin-top:18px;font-size:8px;letter-spacing:1.5px;color:rgba(var(--accent-rgb),0.25);">[ XBRAINET — Il tuo Cervello Digitale viene salvato solo se sei registrato ]</div>
+  <div style="margin-top:18px;font-size:10px;letter-spacing:1.5px;color:rgba(var(--accent-rgb),0.25);">[ XBRAINET — Il tuo Cervello Digitale viene salvato solo se sei registrato ]</div>
 </div>`;
 }
 
@@ -444,7 +444,7 @@ function scClickwrap(){
   <div style="width:100%;max-width:680px;margin:0 auto;padding-bottom:48px;">
     <div style="font-size:clamp(10px,1.3vw,12px);letter-spacing:2px;color:#FFB800;text-align:center;border:1px solid rgba(255,184,0,0.45);background:rgba(30,15,0,0.65);padding:14px 18px;margin-bottom:16px;">[ XBRAINET — PROTOCOLLO DI ACCESSO OBBLIGATORIO ]</div>
     <p style="font-size:13px;line-height:1.65;color:var(--text-soft);margin:0 0 6px;">Leggi attentamente. Per accedere devi spuntare tutte le caselle e cliccare «Accetto e Accedi». Se non sei d'accordo con anche solo un punto, non proseguire.</p>
-    <p style="font-size:9.5px;color:rgba(var(--accent-rgb),0.28);margin:0 0 18px;letter-spacing:.5px;">Servizio: XBRAINET &nbsp;|&nbsp; Titolare: DESIDERI GABRIELE &nbsp;|&nbsp; Giugno 2026 — Versione 2.0</p>
+    <p style="font-size:11px;color:rgba(var(--accent-rgb),0.28);margin:0 0 18px;letter-spacing:.5px;">Servizio: XBRAINET &nbsp;|&nbsp; Titolare: DESIDERI GABRIELE &nbsp;|&nbsp; Giugno 2026 — Versione 2.0</p>
     <div style="border:1px solid rgba(var(--accent-rgb),0.2);background:rgba(var(--panel-rgb),0.55);padding:18px 20px;max-height:44vh;overflow-y:auto;display:flex;flex-direction:column;gap:0;margin-bottom:20px;">
       <div style="padding-bottom:16px;">
         <div style="font-size:11px;letter-spacing:1.5px;color:var(--accent);margin-bottom:8px;font-weight:700;">▸ 1. CHE COS'È (E CHE COSA NON È) QUESTO SERVIZIO</div>
@@ -463,11 +463,11 @@ function scClickwrap(){
         <p style="font-size:13px;line-height:1.75;color:var(--text-soft);margin:0;">Ad ogni sessione, XBRAINET estrae automaticamente pattern e sintesi dai tuoi messaggi per aggiornare il tuo Cervello Digitale. Questo processo avviene in background senza intervento manuale.<br><br>I dati estratti includono: pattern cognitivi, aree di interesse, stati emotivi inferiti, tendenze comportamentali nelle relazioni.<br><br>Questi dati sono trattati esclusivamente per personalizzare la tua esperienza all'interno di XBRAINET e non vengono condivisi, venduti o utilizzati per addestrare modelli AI di terze parti.<br><br>Puoi cancellare il tuo Cervello Digitale in qualsiasi momento dalla sezione Profilo (Art. 17 GDPR).<br><br><span style="color:#FFB800;">Base giuridica: consenso esplicito (Art. 6.1.a + Art. 9.2.a GDPR).</span></p>
       </div>
       <div style="border-top:1px dashed rgba(var(--accent-rgb),0.15);padding:16px 0;">
-        <div style="font-size:11px;letter-spacing:1.5px;color:#00FFB4;margin-bottom:8px;font-weight:700;">▸ 3-ter. NEURAL LINK — CONNESSIONE TRA DUE CERVELLI DIGITALI <span style="color:#00FFB4;font-size:10px;">(VEGA+)</span></div>
+        <div style="font-size:11px;letter-spacing:1.5px;color:#00FFB4;margin-bottom:8px;font-weight:700;">▸ 3-ter. NEURAL LINK — CONNESSIONE TRA DUE CERVELLI DIGITALI <span style="color:#00FFB4;font-size:11.5px;">(VEGA+)</span></div>
         <p style="font-size:13px;line-height:1.75;color:var(--text-soft);margin:0;">La funzione Neural Link consente di connettere il tuo Cervello Digitale con quello di un'altra persona per ricevere un'analisi comparativa.<br><br>→ Entrambe le persone devono aver accettato i presenti Termini prima che il Neural Link possa attivarsi.<br>→ L'altra persona non ha accesso diretto al tuo Cervello Digitale.<br>→ L'analisi è una simulazione a scopo riflessivo e ricreativo. Non costituisce mediazione o arbitrato.<br>→ I suoi esiti non sono vincolanti e non hanno valore legale.<br><br><span style="color:#FFB800;">Base giuridica: consenso esplicito di entrambi gli utenti (Art. 6.1.a GDPR).</span></p>
       </div>
       <div style="border-top:1px dashed rgba(var(--accent-rgb),0.15);padding:16px 0;">
-        <div style="font-size:11px;letter-spacing:1.5px;color:#00FFB4;margin-bottom:8px;font-weight:700;">▸ 3-quater. BLIND SPOT — FEEDBACK ANONIMI DI TERZI <span style="color:#00FFB4;font-size:10px;">(VEGA+)</span></div>
+        <div style="font-size:11px;letter-spacing:1.5px;color:#00FFB4;margin-bottom:8px;font-weight:700;">▸ 3-quater. BLIND SPOT — FEEDBACK ANONIMI DI TERZI <span style="color:#00FFB4;font-size:11.5px;">(VEGA+)</span></div>
         <p style="font-size:13px;line-height:1.75;color:var(--text-soft);margin:0;">La funzione BLIND SPOT genera un link anonimo da condividere per raccogliere feedback su di te.<br><br>→ Chi risponde è informato che i feedback saranno elaborati da un sistema AI.<br>→ I feedback sono aggregati e anonimizzati prima di essere presentati a te.<br>→ Il sistema non elabora report con meno di 3 risposte.<br>→ Sei responsabile di condividere il link solo con persone che abbiano dato il loro consenso informale.<br><br><span style="color:#FFB800;">Base giuridica per chi risponde: legittimo interesse (Art. 6.1.f GDPR).</span></p>
       </div>
       <div style="border-top:1px dashed rgba(var(--accent-rgb),0.15);padding:16px 0;">
@@ -490,7 +490,7 @@ function scClickwrap(){
     <div style="display:flex;flex-direction:column;gap:8px;">${checkboxes}</div>
     <div style="${ctrStyle}">[ ${cwCount} / 7 dichiarazioni accettate ]</div>
     <button onclick="acceptClickwrap()" ${cwAll?'':'disabled'} style="${btnStyle}" onmouseover="if(${cwAll}){this.style.background='#00FFB4';this.style.color='#000';}" onmouseout="this.style.background='transparent';this.style.color='${cwAll?'#00FFB4':'rgba(0,255,180,0.25)'}';;">[ ACCETTO E ACCEDO A XBRAINET ]</button>
-    <p style="font-size:8px;color:rgba(var(--accent-rgb),0.25);text-align:center;margin-top:10px;letter-spacing:1px;line-height:1.6;">Versione: 2.0 — Giugno 2026 — Legge applicabile: ordinamento italiano / UE<br>Nota: questo documento è una bozza e deve essere validato da un legale prima della pubblicazione.</p>
+    <p style="font-size:10px;color:rgba(var(--accent-rgb),0.25);text-align:center;margin-top:10px;letter-spacing:1px;line-height:1.6;">Versione: 2.0 — Giugno 2026 — Legge applicabile: ordinamento italiano / UE<br>Nota: questo documento è una bozza e deve essere validato da un legale prima della pubblicazione.</p>
   </div>
 </div>`;
 }
@@ -499,14 +499,14 @@ function scEntitySelect(){
   return `<div style="position:relative;z-index:5;min-height:100vh;overflow-y:auto;padding:clamp(24px,4vw,60px) clamp(16px,3vw,40px);">
   <div style="width:100%;max-width:600px;margin:0 auto;padding-bottom:48px;">
     <div style="text-align:center;margin-bottom:32px;">
-      <div style="font-size:10px;letter-spacing:3px;color:var(--accent);margin-bottom:14px;">[ XBRAINET — SELEZIONA LA TUA CONNESSIONE ]</div>
+      <div style="font-size:11.5px;letter-spacing:3px;color:var(--accent);margin-bottom:14px;">[ XBRAINET — SELEZIONA LA TUA CONNESSIONE ]</div>
       <div style="font-size:14px;color:var(--text-soft);line-height:1.7;">Tre entità. Tre livelli di accesso.<br>Scegli con quale intelligenza vuoi connetterti.</div>
     </div>
     <div style="display:flex;flex-direction:column;gap:16px;">
       <div style="border:1px solid var(--accent);background:rgba(0,5,2,0.75);padding:22px 24px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
           <div class="entity-name" style="font-size:30px;color:var(--accent);text-shadow:0 0 16px rgba(var(--accent-rgb),.5);line-height:1;">LYRA</div>
-          <div style="font-size:10px;letter-spacing:1.5px;color:var(--accent);border:1px solid var(--accent);padding:4px 10px;">[ GRATUITO ]</div>
+          <div style="font-size:11.5px;letter-spacing:1.5px;color:var(--accent);border:1px solid var(--accent);padding:4px 10px;">[ GRATUITO ]</div>
         </div>
         <div style="font-size:11px;color:rgba(var(--accent-rgb),.6);letter-spacing:1.5px;margin-bottom:4px;">Prima connessione — Analisi base</div>
         <div style="font-size:13px;color:var(--text-soft);margin-bottom:16px;line-height:1.5;">Cervello Digitale base · 10 messaggi al giorno</div>
@@ -521,7 +521,7 @@ function scEntitySelect(){
       <div style="border:1px solid #00FFB4;background:rgba(0,5,4,0.75);padding:22px 24px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
           <div class="entity-name" style="font-size:30px;color:#00FFB4;text-shadow:0 0 16px rgba(0,255,180,.5);line-height:1;">VEGA</div>
-          <div style="font-size:10px;letter-spacing:1.5px;color:#00FFB4;border:1px solid #00FFB4;padding:4px 10px;">[ €4,99/MESE ]</div>
+          <div style="font-size:11.5px;letter-spacing:1.5px;color:#00FFB4;border:1px solid #00FFB4;padding:4px 10px;">[ €4,99/MESE ]</div>
         </div>
         <div style="font-size:11px;color:rgba(0,255,180,.6);letter-spacing:1.5px;margin-bottom:4px;">Analisi profonda — Neural Link attivo</div>
         <div style="font-size:13px;color:var(--text-soft);margin-bottom:16px;line-height:1.5;">Cervello Digitale completo · Messaggi illimitati</div>
@@ -536,7 +536,7 @@ function scEntitySelect(){
       <div style="border:1px solid #FFB800;background:rgba(5,3,0,0.75);padding:22px 24px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
           <div class="entity-name" style="font-size:30px;color:#FFB800;text-shadow:0 0 16px rgba(255,184,0,.5);line-height:1;">AION</div>
-          <div style="font-size:10px;letter-spacing:1.5px;color:#FFB800;border:1px solid #FFB800;padding:4px 10px;">[ €14,99/MESE ]</div>
+          <div style="font-size:11.5px;letter-spacing:1.5px;color:#FFB800;border:1px solid #FFB800;padding:4px 10px;">[ €14,99/MESE ]</div>
         </div>
         <div style="font-size:11px;color:rgba(255,184,0,.6);letter-spacing:1.5px;margin-bottom:4px;">Accesso totale — Analisi primordiale</div>
         <div style="font-size:13px;color:var(--text-soft);margin-bottom:16px;line-height:1.5;">Tutto di VEGA + Neural Link avanzato</div>
@@ -549,7 +549,7 @@ function scEntitySelect(){
         <button onclick="handleEntitySelect('AION')" style="width:100%;background:rgba(255,184,0,.07);border:1px solid #FFB800;color:#FFB800;font-size:13px;font-weight:700;letter-spacing:1.5px;padding:14px;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(255,184,0,.18)';this.style.boxShadow='0 0 22px rgba(255,184,0,.38)'" onmouseout="this.style.background='rgba(255,184,0,.07)';this.style.boxShadow=''">[ CONNETTI CON AION ]</button>
       </div>
     </div>
-    <div style="text-align:center;margin-top:24px;font-size:9px;color:rgba(var(--accent-rgb),.25);letter-spacing:1.5px;">[ Puoi cambiare connessione in qualsiasi momento dal tuo profilo ]</div>
+    <div style="text-align:center;margin-top:24px;font-size:10.5px;color:rgba(var(--accent-rgb),.25);letter-spacing:1.5px;">[ Puoi cambiare connessione in qualsiasi momento dal tuo profilo ]</div>
   </div>
 </div>`;
 }
@@ -560,7 +560,7 @@ function scLanding(){
   const cfg=entityCfg(entity);
   const isWide=S.isWide;
   const subheadlines={LYRA:"Prima connessione attiva.\nIl tuo Cervello Digitale è pronto per essere costruito.",VEGA:"Neural Link stabilito.\nAnalisi profonda e connessione tra menti.",AION:"Connessione primordiale.\nAccesso totale attraverso la Rete Neurale dell'universo."};
-  const leftHud=isWide?`<div style="flex:none;font-size:9px;letter-spacing:1px;color:var(--accent-mid);line-height:2.15;text-align:left;border-left:1px solid rgba(var(--accent-rgb),0.3);padding-left:8px;white-space:nowrap;align-self:center;">
+  const leftHud=isWide?`<div style="flex:none;font-size:10.5px;letter-spacing:1px;color:var(--accent-mid);line-height:2.15;text-align:left;border-left:1px solid rgba(var(--accent-rgb),0.3);padding-left:8px;white-space:nowrap;align-self:center;">
     <div style="color:var(--accent);">SISTEMA</div><div>XBRAINET</div>
     <div style="margin-top:5px;color:var(--accent);">ENTITÀ</div><div style="color:${cfg.color};font-weight:700;">${entity}</div>
     <div style="margin-top:5px;color:var(--accent);">PIANO</div><div>${cfg.tier}</div>
@@ -568,7 +568,7 @@ function scLanding(){
     <div style="margin-top:5px;color:#FF0033;">STATO</div>
     <div style="color:#FF0033;animation:blink-red .9s step-end infinite;">TRASMISSIONE ●</div>
   </div>`:'';
-  const rightHud=isWide?`<div style="flex:none;font-size:9px;letter-spacing:1px;color:var(--accent-mid);line-height:2.15;text-align:right;border-right:1px solid rgba(var(--accent-rgb),0.3);padding-right:8px;white-space:nowrap;align-self:center;">
+  const rightHud=isWide?`<div style="flex:none;font-size:10.5px;letter-spacing:1px;color:var(--accent-mid);line-height:2.15;text-align:right;border-right:1px solid rgba(var(--accent-rgb),0.3);padding-right:8px;white-space:nowrap;align-self:center;">
     <div style="color:var(--accent);">ID NEURALE</div><div style="color:#00FFB4;">${esc(S.username||'OSPITE')}</div>
     <div style="margin-top:5px;color:var(--accent);">NEURAL LINK</div><div>${cfg.neuralLink}</div>
     <div style="margin-top:5px;color:var(--accent);">ENCRYPT</div><div>QUANTUM</div>
@@ -583,7 +583,7 @@ function scLanding(){
     <span>NEURAL LINK: ${cfg.neuralLink} — SEGNALE: ${S.freq} THz</span>
     <div style="display:flex;gap:10px;align-items:center;">
       <span>ENTITÀ: <span style="color:${cfg.color};font-weight:700;">${entity}</span></span>
-      <button onclick="openProfile()" style="background:transparent;border:1px solid rgba(var(--accent-rgb),.3);color:var(--accent-mid);font-size:9px;letter-spacing:1px;padding:4px 9px;cursor:pointer;" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--accent-mid)';this.style.borderColor='rgba(var(--accent-rgb),.3)'">[ ID ]</button>
+      <button onclick="openProfile()" style="background:transparent;border:1px solid rgba(var(--accent-rgb),.3);color:var(--accent-mid);font-size:10.5px;letter-spacing:1px;padding:4px 9px;cursor:pointer;" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--accent-mid)';this.style.borderColor='rgba(var(--accent-rgb),.3)'">[ ID ]</button>
     </div>
   </div>
   <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:clamp(12px,2vw,32px);flex-wrap:nowrap;padding:clamp(24px,4vw,60px) clamp(16px,3vw,40px) clamp(48px,6vw,80px);overflow:visible;">
@@ -728,36 +728,36 @@ function scChat(){
   const msgs=S.messages.map(m=>`<div style="display:flex;justify-content:${m.role==='user'?'flex-end':'flex-start'};"><div style="${m.role==='user'?userBubble:alienBubble}">${esc(m.text)}</div></div>`).join('');
   const typing=S.chatTyping?`<div style="display:flex;justify-content:flex-start;"><div style="${alienBubble}">${esc(S.chatTyping)}▌</div></div>`:'';
   const brainNodes=S.answers.map(a=>`<div style="border:1px solid rgba(var(--accent-rgb),.22);background:rgba(var(--accent-rgb),.04);padding:10px 12px;margin-bottom:8px;">
-    <div style="display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;box-shadow:0 0 6px var(--accent);flex:none;animation:pulseDot 2s infinite;"></span>${esc(a.node)}</div>
+    <div style="display:flex;align-items:center;gap:7px;font-size:11.5px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;"><span style="width:6px;height:6px;background:var(--accent);border-radius:50%;box-shadow:0 0 6px var(--accent);flex:none;animation:pulseDot 2s infinite;"></span>${esc(a.node)}</div>
     <div style="font-size:12px;color:var(--text-soft);line-height:1.45;word-break:break-word;">${esc(trunc(a.label))}</div>
   </div>`).join('');
   const sidePanel=!S.isNarrow?`<aside style="width:280px;flex:none;border-right:1px solid rgba(var(--accent-rgb),.25);background:rgba(4,10,6,.75);padding:20px 16px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;">
     <div style="font-family:'Orbitron',monospace;font-size:16px;font-weight:700;letter-spacing:2px;color:var(--text);line-height:1;">CERVELLO DIGITALE</div>
-    <div style="font-size:10px;color:var(--accent-dim);letter-spacing:2px;margin-bottom:14px;">NODI DECRITTATI</div>
+    <div style="font-size:11.5px;color:var(--accent-dim);letter-spacing:2px;margin-bottom:14px;">NODI DECRITTATI</div>
     ${brainNodes}
     <button onclick="openBlindspot()" style="margin-top:8px;text-align:left;background:rgba(0,255,180,.06);border:1px solid rgba(0,255,180,.4);color:#00FFB4;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:11px 13px;cursor:pointer;width:100%;transition:all .2s;" onmouseover="this.style.background='rgba(0,255,180,.15)';this.style.borderColor='#00FFB4'" onmouseout="this.style.background='rgba(0,255,180,.06)';this.style.borderColor='rgba(0,255,180,.4)'">
-      <div style="display:flex;justify-content:space-between;align-items:center;"><span>[ BLIND SPOT ]</span><span style="font-size:9px;color:rgba(0,255,180,.5);">${bsUnlocked?'VEGA+':'[LYRA — BLOCCATO]'}</span></div>
-      <div style="font-size:10px;color:rgba(0,255,180,.5);margin-top:4px;">Scopri cosa vedono gli altri di te</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;"><span>[ BLIND SPOT ]</span><span style="font-size:10.5px;color:rgba(0,255,180,.5);">${bsUnlocked?'VEGA+':'[LYRA — BLOCCATO]'}</span></div>
+      <div style="font-size:11.5px;color:rgba(0,255,180,.5);margin-top:4px;">Scopri cosa vedono gli altri di te</div>
     </button>
     <button onclick="openNeuralLink()" style="margin-top:6px;text-align:left;background:rgba(0,255,180,.06);border:1px solid rgba(0,255,180,.4);color:#00FFB4;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:11px 13px;cursor:pointer;width:100%;transition:all .2s;" onmouseover="this.style.background='rgba(0,255,180,.15)';this.style.borderColor='#00FFB4'" onmouseout="this.style.background='rgba(0,255,180,.06)';this.style.borderColor='rgba(0,255,180,.4)'">
-      <div style="display:flex;justify-content:space-between;align-items:center;"><span>[ NEURAL LINK ]</span><span style="font-size:9px;color:rgba(0,255,180,.5);">${bsUnlocked?'VEGA+':'[LYRA — BLOCCATO]'}</span></div>
-      <div style="font-size:10px;color:rgba(0,255,180,.5);margin-top:4px;">Connetti la tua mente a un'altra persona</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;"><span>[ NEURAL LINK ]</span><span style="font-size:10.5px;color:rgba(0,255,180,.5);">${bsUnlocked?'VEGA+':'[LYRA — BLOCCATO]'}</span></div>
+      <div style="font-size:11.5px;color:rgba(0,255,180,.5);margin-top:4px;">Connetti la tua mente a un'altra persona</div>
     </button>
     <div style="margin-top:20px;border-top:1px dashed rgba(var(--accent-rgb),.2);padding-top:16px;">
-      <div style="font-size:9px;letter-spacing:2px;color:var(--accent-dim);margin-bottom:10px;">[ XBRAINET — FUNZIONALITÀ ]</div>
+      <div style="font-size:10.5px;letter-spacing:2px;color:var(--accent-dim);margin-bottom:10px;">[ XBRAINET — FUNZIONALITÀ ]</div>
       <div style="display:flex;flex-direction:column;gap:7px;font-size:11px;">
         <div style="color:var(--accent);">✓&nbsp;&nbsp;Chat con ${entity}</div>
         <div style="color:var(--accent);">✓&nbsp;&nbsp;Cervello Digitale</div>
         <div style="${bsMenuStyle}">${bsMenuLabel}</div>
         <div style="${bsMenuStyle}">${(bsUnlocked?'✓':'✗')+'  NEURAL LINK'+(bsUnlocked?'':' [VEGA+]')}</div>
         <div style="height:1px;background:rgba(var(--accent-rgb),.12);margin:4px 0;"></div>
-        <div style="opacity:.4;cursor:default;"><div style="color:var(--accent-mid);">⌛&nbsp;&nbsp;Gruppi</div><div style="font-size:10px;color:var(--accent-dim);padding-left:18px;line-height:1.5;">3+ menti connesse nella Rete Neurale Cosmica</div></div>
-        <div style="opacity:.4;cursor:default;"><div style="color:var(--accent-mid);">⌛&nbsp;&nbsp;Chat di Supporto</div><div style="font-size:10px;color:var(--accent-dim);padding-left:18px;line-height:1.5;">Analisi di tutte le tue connessioni attive</div></div>
+        <div style="opacity:.4;cursor:default;"><div style="color:var(--accent-mid);">⌛&nbsp;&nbsp;Gruppi</div><div style="font-size:11.5px;color:var(--accent-dim);padding-left:18px;line-height:1.5;">3+ menti connesse nella Rete Neurale Cosmica</div></div>
+        <div style="opacity:.4;cursor:default;"><div style="color:var(--accent-mid);">⌛&nbsp;&nbsp;Chat di Supporto</div><div style="font-size:11.5px;color:var(--accent-dim);padding-left:18px;line-height:1.5;">Analisi di tutte le tue connessioni attive</div></div>
       </div>
     </div>
   </aside>`:'';
   const chatUsernameLabel=isReg?`[ ID NEURALE: ${S.username} ]`:'[ CONNESSIONE: OSPITE — SESSIONE TEMPORANEA ]';
-  const chatUsernameStyle="font-size:8px;letter-spacing:1.5px;color:"+(isReg?'rgba(0,255,180,0.38)':'#FFB800')+";text-align:center;padding-bottom:5px;";
+  const chatUsernameStyle="font-size:10px;letter-spacing:1.5px;color:"+(isReg?'rgba(0,255,180,0.38)':'#FFB800')+";text-align:center;padding-bottom:5px;";
   return `<div style="position:relative;z-index:5;min-height:100vh;height:100vh;display:flex;flex-direction:row;">
   ${sidePanel}
   <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
@@ -765,7 +765,7 @@ function scChat(){
       <span style="color:#00FFB4;">● ${entity} — XBRAINET</span>
       <div style="display:flex;gap:10px;align-items:center;">
         <span>${S.freq} THz</span>
-        <button onclick="openProfile()" style="background:transparent;border:1px solid rgba(var(--accent-rgb),.3);color:var(--accent-mid);font-size:9px;letter-spacing:1px;padding:4px 9px;cursor:pointer;" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--accent-mid)';this.style.borderColor='rgba(var(--accent-rgb),.3)'">[ PROFILO ]</button>
+        <button onclick="openProfile()" style="background:transparent;border:1px solid rgba(var(--accent-rgb),.3);color:var(--accent-mid);font-size:10.5px;letter-spacing:1px;padding:4px 9px;cursor:pointer;" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--accent-mid)';this.style.borderColor='rgba(var(--accent-rgb),.3)'">[ PROFILO ]</button>
       </div>
     </div>
     <div id="chat-scroll" style="flex:1;overflow-y:auto;padding:clamp(16px,3vw,30px);display:flex;flex-direction:column;gap:18px;">${msgs}${typing}</div>
@@ -882,8 +882,8 @@ function scNeuralLink(){
       <button onclick="connectNeuralLink()" ${S.nlBusy?'disabled':''} style="width:100%;background:rgba(0,255,180,.08);border:1px solid rgba(0,255,180,.5);color:#00FFB4;font-size:14px;font-weight:700;letter-spacing:1.5px;padding:16px;cursor:${S.nlBusy?'wait':'pointer'};" onmouseover="if(!${S.nlBusy}){this.style.background='rgba(0,255,180,.18)';this.style.boxShadow='0 0 24px rgba(0,255,180,.3)'}" onmouseout="this.style.background='rgba(0,255,180,.08)';this.style.boxShadow=''">${S.nlBusy?'[ CONNESSIONE… ]':'[ STABILISCI NEURAL LINK ]'}</button>`
       :`<div style="border:1px solid rgba(var(--accent-rgb),.3);background:rgba(var(--panel-rgb),.55);padding:22px;white-space:pre-wrap;font-size:14px;line-height:1.9;color:var(--accent);text-shadow:0 0 8px rgba(var(--accent-rgb),.35);">${esc(S.nlConnectResult)}</div>
       ${S.nlAnalysis
-        ?`<div style="margin-top:16px;border:1px solid rgba(0,255,180,.4);background:rgba(0,14,10,.7);padding:22px;white-space:pre-wrap;font-size:13.5px;line-height:1.85;color:var(--text-soft);text-shadow:0 0 6px rgba(0,255,180,.2);"><div style="font-size:10px;letter-spacing:2px;color:#00FFB4;margin-bottom:14px;">▸ ANALISI COMPARATIVA — ${esc(S.nlConnectLabel||'connection')}</div>${esc(S.nlAnalysis)}</div>
-        <div style="font-size:9px;color:var(--accent-dim);letter-spacing:.5px;margin-top:8px;line-height:1.5;">Simulazione a scopo riflessivo e ricreativo. Non vincolante, priva di valore legale.</div>`
+        ?`<div style="margin-top:16px;border:1px solid rgba(0,255,180,.4);background:rgba(0,14,10,.7);padding:22px;white-space:pre-wrap;font-size:13.5px;line-height:1.85;color:var(--text-soft);text-shadow:0 0 6px rgba(0,255,180,.2);"><div style="font-size:11.5px;letter-spacing:2px;color:#00FFB4;margin-bottom:14px;">▸ ANALISI COMPARATIVA — ${esc(S.nlConnectLabel||'connection')}</div>${esc(S.nlAnalysis)}</div>
+        <div style="font-size:10.5px;color:var(--accent-dim);letter-spacing:.5px;margin-top:8px;line-height:1.5;">Simulazione a scopo riflessivo e ricreativo. Non vincolante, priva di valore legale.</div>`
         :`<button onclick="analyzeNeuralLink()" ${S.nlAnalysisBusy||!S.nlRelationId?'disabled':''} style="margin-top:16px;width:100%;background:rgba(0,255,180,.08);border:1px solid rgba(0,255,180,.5);color:#00FFB4;font-size:13px;font-weight:700;letter-spacing:1.5px;padding:15px;cursor:${S.nlAnalysisBusy?'wait':'pointer'};" onmouseover="if(!${S.nlAnalysisBusy}){this.style.background='rgba(0,255,180,.18)';this.style.boxShadow='0 0 24px rgba(0,255,180,.3)'}" onmouseout="this.style.background='rgba(0,255,180,.08)';this.style.boxShadow=''">${S.nlAnalysisBusy?'[ ANALISI IN CORSO… ]':'[ GENERA ANALISI COMPARATIVA ]'}</button>`}
       <button onclick="setState({nlConnectResult:'',nlConnectInput:'',nlConnectLabel:'',nlRelationId:'',nlAnalysis:''})" style="margin-top:12px;background:transparent;border:1px solid rgba(var(--accent-rgb),.25);color:var(--accent-dim);font-size:12px;padding:12px 16px;cursor:pointer;" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--accent-dim)';this.style.borderColor='rgba(var(--accent-rgb),.25)'">[ NUOVA CONNESSIONE ]</button>`}
     </div>`;
@@ -912,8 +912,8 @@ function scProfile(){
     <div style="font-size:12px;letter-spacing:3px;color:#FFB800;margin-bottom:18px;">[ PROFILO — CERVELLO DIGITALE ]</div>
     <div style="border:1px solid rgba(var(--accent-rgb),.3);background:rgba(var(--panel-rgb),.55);padding:20px 22px;margin-bottom:18px;display:flex;flex-direction:column;gap:8px;">
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;">
-        <div><div style="font-size:9px;color:var(--accent-dim);letter-spacing:1.5px;margin-bottom:2px;">ID NEURALE</div><div style="font-size:14px;color:#00FFB4;letter-spacing:1px;">${esc(S.username||'OSPITE')}</div></div>
-        <div style="text-align:right;"><div style="font-size:9px;color:var(--accent-dim);letter-spacing:1.5px;margin-bottom:2px;">ENTITÀ ATTIVA</div><div class="entity-name" style="font-size:16px;color:${cfg.color};">${entity}</div></div>
+        <div><div style="font-size:10.5px;color:var(--accent-dim);letter-spacing:1.5px;margin-bottom:2px;">ID NEURALE</div><div style="font-size:14px;color:#00FFB4;letter-spacing:1px;">${esc(S.username||'OSPITE')}</div></div>
+        <div style="text-align:right;"><div style="font-size:10.5px;color:var(--accent-dim);letter-spacing:1.5px;margin-bottom:2px;">ENTITÀ ATTIVA</div><div class="entity-name" style="font-size:16px;color:${cfg.color};">${entity}</div></div>
       </div>
       <div style="border-top:1px dashed rgba(var(--accent-rgb),.15);padding-top:8px;display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:var(--accent-dim);letter-spacing:1px;">
         <div>PIANO: <span style="color:var(--text-soft);">${cfg.tier}</span></div>
