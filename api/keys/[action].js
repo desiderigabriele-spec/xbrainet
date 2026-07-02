@@ -1,15 +1,65 @@
 import { supabase } from '../../lib/supabase.js';
 import { anthropic, MODELS } from '../../lib/anthropic.js';
+import { generateToken } from '../../lib/username.js';
 import { extractAuthUserId } from '../../lib/auth.js';
 
-// Generates (or returns cached) comparative analysis between the two Digital
-// Brains joined by a Neural Link. Either side of the relation may request it.
+// Consolidated Neural Link endpoint. URLs stay /api/keys/generate|connect|analyze.
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).end();
-
   const authUserId = extractAuthUserId(req);
   if (!authUserId) return res.status(401).json({ error: 'Unauthorized' });
 
+  const { action } = req.query;
+  if (action === 'generate') return generateKey(req, res, authUserId);
+  if (action === 'connect')  return connectKey(req, res, authUserId);
+  if (action === 'analyze')  return analyze(req, res, authUserId);
+  return res.status(404).json({ error: 'Unknown action' });
+}
+
+async function generateKey(req, res, authUserId) {
+  if (req.method !== 'POST') return res.status(405).end();
+  const { relationLabel, tier } = req.body;
+
+  if (tier === 'free') {
+    return res.status(403).json({ error: 'UPGRADE_REQUIRED', message: 'Neural Link requires VEGA or AION plan.' });
+  }
+
+  const sessionKey = `LINK-${generateToken(4)}-${generateToken(4)}`;
+  const expiresAt  = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+
+  const { data, error } = await supabase.from('relations')
+    .insert({
+      user_id:         authUserId,
+      session_key:     sessionKey,
+      key_expires_at:  expiresAt,
+      relation_label:  relationLabel || 'connection'
+    })
+    .select().single();
+
+  if (error) return res.status(500).json({ error });
+  res.status(200).json({ sessionKey, expiresAt, relationId: data.id });
+}
+
+async function connectKey(req, res, authUserId) {
+  if (req.method !== 'POST') return res.status(405).end();
+  const { sessionKey } = req.body;
+  if (!sessionKey) return res.status(400).json({ error: 'sessionKey required' });
+
+  const { data: relation, error } = await supabase.from('relations')
+    .select('*').eq('session_key', sessionKey).single();
+
+  if (error || !relation)      return res.status(404).json({ error: 'Key not found or expired' });
+  if (relation.key_used)       return res.status(400).json({ error: 'Key already used' });
+  if (new Date(relation.key_expires_at) < new Date()) return res.status(400).json({ error: 'Key expired' });
+  if (relation.user_id === authUserId) return res.status(400).json({ error: 'Cannot connect to yourself' });
+
+  await supabase.from('relations')
+    .update({ related_user_id: authUserId, key_used: true }).eq('id', relation.id);
+
+  res.status(200).json({ success: true, relationId: relation.id, label: relation.relation_label });
+}
+
+async function analyze(req, res, authUserId) {
+  if (req.method !== 'POST') return res.status(405).end();
   const { relationId, tier, lang = 'en', force = false } = req.body;
   if (!relationId) return res.status(400).json({ error: 'relationId required' });
 
@@ -22,7 +72,6 @@ export default async function handler(req, res) {
 
   if (error || !relation) return res.status(404).json({ error: 'Relation not found' });
 
-  // Authorization: requester must be one of the two connected minds
   if (relation.user_id !== authUserId && relation.related_user_id !== authUserId) {
     return res.status(403).json({ error: 'Not part of this connection' });
   }
@@ -31,7 +80,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'CONNECTION_PENDING', message: 'The other mind has not connected yet.' });
   }
 
-  // Return cached analysis unless a refresh is forced
   const cached = relation.behavioral_delta || {};
   if (cached.analysis && !force) {
     return res.status(200).json({ analysis: cached.analysis, generatedAt: cached.generated_at, cached: true });
@@ -48,7 +96,6 @@ export default async function handler(req, res) {
 
   const model = MODELS[tier] || MODELS.vega;
   const isAion = tier === 'aion';
-
   const langLine = lang === 'it' ? 'Rispondi in italiano.' : 'Respond in English.';
 
   const system = `You are the XBRAINET Neural Link engine performing a comparative analysis of two connected Digital Brains.

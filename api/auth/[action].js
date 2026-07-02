@@ -5,7 +5,34 @@ import { signToken } from '../../lib/auth.js';
 
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
+// Consolidated auth endpoint. URLs stay /api/auth/send-otp and /api/auth/verify-otp
+// (Vercel passes the last path segment as req.query.action).
 export default async function handler(req, res) {
+  const { action } = req.query;
+  if (action === 'send-otp')   return sendOtp(req, res);
+  if (action === 'verify-otp') return verifyOtp(req, res);
+  return res.status(404).json({ error: 'Unknown action' });
+}
+
+async function sendOtp(req, res) {
+  if (req.method !== 'POST') return res.status(405).end();
+  const { phone } = req.body;
+  if (!phone) return res.status(400).json({ error: 'Phone required' });
+
+  const normalized = phone.startsWith('+') ? phone : `+39${phone}`;
+
+  try {
+    await client.verify.v2
+      .services(process.env.TWILIO_VERIFY_SID)
+      .verifications.create({ to: normalized, channel: 'sms' });
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error('OTP send error:', err.message);
+    res.status(500).json({ error: 'Failed to send OTP' });
+  }
+}
+
+async function verifyOtp(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
   const { phone, code, lang = 'en' } = req.body;
   if (!phone || !code) return res.status(400).json({ error: 'Phone and code required' });
@@ -25,7 +52,7 @@ export default async function handler(req, res) {
 
   const phoneHash = hashPhoneForLookup(phone);
 
-  let { data: user, error } = await supabase.from('users')
+  let { data: user } = await supabase.from('users')
     .select('*').eq('phone_hash', phoneHash).single();
 
   if (!user) {
