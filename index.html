@@ -31,7 +31,7 @@ input,textarea,button{font-family:'JetBrains Mono',monospace;}
 @keyframes orb-dot-pulse{from{transform:scale(1);}to{transform:scale(1.8);}}
 @keyframes orb-label-blink{0%,100%{opacity:1;}50%{opacity:0;}}
 :root{--accent:#00FF41;--accent-rgb:0,255,65;--accent-mid:rgba(var(--accent-rgb),.62);--accent-dim:rgba(var(--accent-rgb),.42);--entity-hex:var(--accent);--bg:#000;--panel-rgb:0,0,0;--text:#fff;--text-soft:#bff5cc;}
-:root[data-mode="light"]{--bg:#eef1ee;--panel-rgb:255,255,255;--text:#0a0a0a;--text-soft:#1c3016;--accent-mid:rgba(var(--accent-rgb),.95);--accent-dim:rgba(var(--accent-rgb),.78);}
+:root[data-mode="light"]{--bg:#eef1ee;--panel-rgb:255,255,255;--text:#0a0a0a;--text-soft:#1c3016;}
 :root[data-mode="light"] #matrix-canvas{display:none;}
 #orb-container{position:relative;width:340px;height:340px;display:flex;align-items:center;justify-content:center;}
 #orb-glow{position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(var(--accent-rgb),.18) 0%,rgba(0,200,50,.08) 40%,transparent 70%);animation:orb-breathe 3s ease-in-out infinite;pointer-events:none;}
@@ -205,24 +205,43 @@ function genUsername(){
   return `${r(L,4)}-${r(D,4)}-${r(L,2)}`;
 }
 
+let _themeHex='#00FF41',_themeRgb='0,255,65',_mode='dark';
+// Recomputes accent CSS vars. In light mode the accent used for text/borders
+// is darkened for contrast on the light background, while --accent-rgb stays
+// vivid so translucent glows/fills keep their color.
+function refreshAccent(){
+  const root=document.documentElement.style;
+  const [r,g,b]=_themeRgb.split(',').map(Number);
+  root.setProperty('--accent-rgb',_themeRgb);
+  if(_mode==='light'){
+    const dk=f=>`rgb(${Math.round(r*f)},${Math.round(g*f)},${Math.round(b*f)})`;
+    root.setProperty('--accent',dk(.40));
+    root.setProperty('--accent-mid',dk(.48));
+    root.setProperty('--accent-dim',dk(.58));
+  } else {
+    root.setProperty('--accent',_themeHex);
+    root.setProperty('--accent-mid',`rgba(${_themeRgb},.62)`);
+    root.setProperty('--accent-dim',`rgba(${_themeRgb},.42)`);
+  }
+}
 function applyTheme(hex,rgb,persist){
-  document.documentElement.style.setProperty('--accent',hex);
-  document.documentElement.style.setProperty('--accent-rgb',rgb);
-  _accentHex=hex;
+  _themeHex=hex; _themeRgb=rgb; _accentHex=hex;
   const [r,g,b]=rgb.split(',').map(Number);
   _accentLight=`rgb(${Math.round(r+(255-r)*.6)},${Math.round(g+(255-g)*.6)},${Math.round(b+(255-b)*.6)})`;
   // Keep the free-tier entity (LYRA) in sync so the orb follows the theme
   EC.LYRA.color=hex; EC.LYRA.rgb={r,g,b};
+  refreshAccent();
   if(_orbRAF){applyEntityColors(S.selectedEntity);applyOrbColors(S.selectedEntity);}
   if(persist){try{localStorage.setItem('xb_theme',JSON.stringify({hex,rgb}));}catch(e){}}
 }
 function setTheme(hex,rgb){applyTheme(hex,rgb,true);render();}
 function applyMode(mode,persist){
-  const light = mode==='light';
-  if(light) document.documentElement.setAttribute('data-mode','light');
-  else       document.documentElement.removeAttribute('data-mode');
+  _mode = mode==='light' ? 'light' : 'dark';
+  if(_mode==='light') document.documentElement.setAttribute('data-mode','light');
+  else                document.documentElement.removeAttribute('data-mode');
   // Matrix fade must match the background so trails clear correctly
-  _matFade = light ? 'rgba(238,241,238,0.10)' : 'rgba(0,0,0,0.08)';
+  _matFade = _mode==='light' ? 'rgba(238,241,238,0.10)' : 'rgba(0,0,0,0.08)';
+  refreshAccent();
   if(persist){try{localStorage.setItem('xb_mode',mode);}catch(e){}}
 }
 function setMode(mode){applyMode(mode,true);render();}
